@@ -1,10 +1,9 @@
-/**
- * src/styles/settings.scss
- *
- * Configures SASS variables and Vuetify overwrites
- */
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+$primary-color: #001C30;
+$secondary-color : #176B87;
+$third-color : #64CCC5;
+$fourth-color : #DAFFFB;
+
+.hide{
+  visibility: hidden;
+}

@@ -1,26 +1,14 @@
 <template>
   <div class="container">
-    <v-window v-model="screen">
-      <v-window-item value="loginScreen">
-        <loginComponent @switch-screen="switchScreen" />
-      </v-window-item>
-      <v-window-item eager value="registerScreen"> <!-- eager permet de charger le component car sinon il y a un bug dans l'animation -->
-        <registerComponent @switch-screen="switchScreen" />
-      </v-window-item>
-    </v-window>
+  <v-window>
+    <loginOrRegisterComponent />
+  </v-window>
   </div>
 </template>
 
 <script lang="ts" setup>
-import loginComponent from '@/components/LoginComponent.vue'
-import registerComponent from '@/components/RegisterComponent.vue'
-import { ref } from 'vue';
+import loginOrRegisterComponent from '@/components/LoginOrCreationForm/LoginOrRegisterComponent.vue'
 
-function switchScreen(val: string) {
-  console.log(val)
-  screen.value = val
-}
-const screen = ref('loginScreen')
 </script>
 
 <style scoped>
@@ -30,7 +18,7 @@ const screen = ref('loginScreen')
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('../../public/bg.jpg');
+  background: url('@/assets/bg.jpg');
   background-position:center;
   background-size: cover;
 }

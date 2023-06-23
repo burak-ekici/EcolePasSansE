@@ -3,8 +3,7 @@
     v-model="drawer"
     :rail="rail"
     permanent
-    color="#033"
-    class="text-white"
+    class="text-white drawer d-flex flex-column justify-space-between"
     ref="navbarDrawer"
     @mouseenter="rail = false"
     @mouseleave="rail = true"
@@ -25,11 +24,10 @@
     </v-list-item>
 
     <v-divider></v-divider>
-
     <v-list 
-    style="flex: 1; display: flex; flex-direction: column; justify-content: center;"
     density="compact" 
     class="text-white"
+    style="top:50%; transform: translateY(-50%)"
     nav
     >
       <v-list-item
@@ -97,16 +95,16 @@ function isActive(routePath : string) : boolean {
 }
 </script>
 
-<style>
-.v-navigation-drawer__content{
-  display:flex ;
-  flex-direction: column;
-}
+<style scoped lang="scss">
+@import '../styles/settings.scss';
+
 .logoutbutton{
   cursor:pointer;
 }
-
+.drawer{
+  background-color: $primary-color !important;
+}
 .logoutbutton:hover{
-  background: rgb(1, 61, 61);
+  background: $secondary-color;
 }
 </style>
