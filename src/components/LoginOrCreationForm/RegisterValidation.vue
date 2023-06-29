@@ -3,15 +3,22 @@
   <!-- il est en position absolute -->
   <div class="validationContainer">
     <img class="checkImg" src="@/assets/validate.png" alt="validation, check logo">
-    <p class="text-h6  font-weight-light text-center">Vous allez recevoir un mail pour finaliser votre inscription</p>
-    <p class="text-h6 font-weight-medium text-center">Veuillez valider votre adresse Email !</p>
+    <p class="text-h6 p1 font-weight-light text-center">Vous allez recevoir un mail pour finaliser votre inscription</p>
+    <p class="text-h6 p2 font-weight-medium text-center">Veuillez valider votre adresse Email !</p>
     <a @click="closeRegisterPage">retourner sur la page de connexion</a>
   </div>
 </template>
 
 <script setup lang="ts">
-import router from '@/router';
 import { onMounted } from 'vue';
+import gsap from 'gsap'
+
+const tl = gsap.timeline()
+
+tl.from('.checkImg', { y: -200, duration : 0.2 , opacity :0},0.3)
+tl.from('.p1', { y: -200, duration : 0.6 , opacity :0 , delay:0.1})
+tl.from('.p2',{ y: -200, duration : 0.9 , opacity :0 , delay:0.2})
+
 
 const emit = defineEmits(['closeRegisterPage']);
 
@@ -20,9 +27,12 @@ function closeRegisterPage() {
 }
 
 onMounted(() => {
-  setTimeout(() => {
-    router.push('/login')
-  },2000)
+  const tl = gsap.timeline()
+
+  tl.from('.checkImg', { y: -50, duration : 0.3 , opacity :0 , ease: "power2.out"},0.1)
+  tl.from('.p1', { y: -50, duration : 0.3 , opacity :0 , delay:0,  ease: "power2.out"},0.2)
+  tl.from('.p2',{ y: -50, duration : 0.3 , opacity :0, ease: "power2.out"},0.3)
+  tl.from('a',{ y: -50, duration : 0.3 , opacity :0 },0.4)
 })
 </script>
 
@@ -51,6 +61,9 @@ a{
   display:inline-block;
   margin:0 auto;
   cursor: pointer;
+  position:relative;
+  left:50%;
+  transform: translateX(-50%);
 }
 a:hover{
   text-decoration: underline;

@@ -1,8 +1,7 @@
 <template>
-  <div>
-    HomePage
+  <div class="newsContainer pa-10">
+    <h2 class="text-center">Nouveautés</h2>
   </div>
-  <hr>
 </template>
 
 <script lang="ts" setup>
