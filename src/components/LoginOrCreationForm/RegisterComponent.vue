@@ -1,4 +1,5 @@
 <template>
+  <!-- comporte le texte et le formulaire de creation de compte ( section de droite ) -->
   <div class="registerSection pa-8 pt-16">
     <div>
       <h3
@@ -11,7 +12,7 @@
         Vous avez dejà un compte ?
         <a @click="switchToLoginSection">Se connecter</a>
       </h4>
-      <v-form class="mt-12" >
+      <v-form class="mt-12" @submit.prevent="checkRegisterForm">
         <v-text-field
           class="mb-2"
           type="text"
@@ -49,12 +50,16 @@
 
 <script setup lang="ts">
 
-const emit = defineEmits(['switchToLoginSection'])
+
+const emit = defineEmits(['switchToLoginSection','registerValidated'])
 
 function switchToLoginSection() : void{
   emit('switchToLoginSection')
 }
 
+function checkRegisterForm() {
+  emit('registerValidated')
+}
 
 </script>
 

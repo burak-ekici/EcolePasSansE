@@ -1,9 +1,17 @@
 <template>
   <div class="loginComponentContainer">
 
-    <loginComponent @switch-to-register-section="switchToRegisterSection" />
+    <loginComponent @loginValidated="isValidate = true" @switch-to-register-section="switchToRegisterSection" />
 
-    <registerComponent @switch-to-login-section="switchToLoginSection" />
+    <registerComponent @registerValidated="isRegistered = true"  @switch-to-login-section="switchToLoginSection" />
+
+    <transition name="validationTransition">
+      <validation v-if="isValidate" class="validationComponent" />
+    </transition>
+
+    <transition name="validationTransition">
+      <registerValidation v-if="isRegistered" @closeRegisterPage="closeRegisterPage" class="validationComponent" />
+    </transition>
 
     <div class="imageSection" :class="{ isRegisterSection}">
       <img class="logo" src="@/assets/logoEcole.png" alt="logo du site web : Logo pas sans E">
@@ -17,19 +25,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
 import loginComponent from './LoginComponent.vue'
 import registerComponent from './RegisterComponent.vue'
+import validation from './Validation.vue'
+import registerValidation from './RegisterValidation.vue'
 
 const isRegisterSection: Ref<boolean> = ref(false);
-
+const isValidate : Ref<boolean> = ref(false)
+const isRegistered: Ref<boolean> = ref(false)
+  
 function switchToRegisterSection() : void{
   isRegisterSection.value = true
+}
+
+function closeRegisterPage() {
+  console.log('ok')
+  isRegisterSection.value = false;
+  isRegistered.value = false;
 }
 
 function switchToLoginSection() :void{
   isRegisterSection.value = false
 }
+
 
 </script>
 
@@ -43,6 +62,7 @@ a {
   font-weight:bold
 }
 
+
 .loginComponentContainer {
   background: #fff;
   height: 70vh;
@@ -51,6 +71,7 @@ a {
   display:flex;
   border-radius: 40px;
   justify-content: space-between;
+  overflow: hidden;
 
   .imageSection{
     width:55%;
@@ -106,6 +127,14 @@ a {
 }
 .animateRollImageToRight{
   animation : rollToRight 0.5s linear;
+}
+
+.validationTransition-enter-from{
+  transform: translateY(-500px);
+  transition: all 0.5s;
+}
+.validationTransition-enter-active{
+  transition: all 0.5s;
 }
 
 </style>
