@@ -7,3 +7,35 @@ $fourth-color : #DAFFFB;
 .hide{
   visibility: hidden;
 }
+
+.bg-primary-color{
+  background : $primary-color
+}
+
+.text-primary-color{
+  color : $primary-color
+}
+
+.bg-secondary-color{
+  background : $secondary-color
+}
+
+.text-secondary-color{
+  color : $secondary-color
+}
+
+.bg-third-color{
+  background : $third-color
+}
+
+.text-third-color{
+  color : $third-color
+}
+
+.bg-fourth-color{
+  background : $fourth-color
+}
+
+.text-fourth-color{
+  color : $fourth-color
+}

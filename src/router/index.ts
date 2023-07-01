@@ -46,6 +46,13 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/LoginPage.vue"),
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({

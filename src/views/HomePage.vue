@@ -1,14 +1,21 @@
 <template>
-  <div class="newsPageContainer pa-10">
+  <div v-if="posts.length" class="newsPageContainer pa-10">
     <div class="subContainer">
-      <h2 class="text-center mb-8 block">Nouveautés</h2>
+      <h2 class="text-center mb-8 block">News</h2>
       <Caroussel :posts="posts" />
       <section class="posts">
-        <div v-for="post in posts" :key="post.title">
-          <h3>{{ post.title }}</h3>
-          <img :src="post.src" alt="">
-          <p>{{post.description}}</p>
-        </div>
+        <v-card class="mt-6 pb-6" style="position:relative"  v-for="(post, index) in posts" :key="post.title">
+          <v-toolbar color="#176B87" border class="text-white">
+            <v-toolbar-title >{{ post.title }}</v-toolbar-title>
+          </v-toolbar>
+          <div class="pa-6">
+            <img :class="{'float-right' : index % 2 , 'float-left' : !(index % 2) }" :src="post.src" alt="">
+            <p>{{post.description}}</p>
+          </div>
+          <div class="btnDiv pr-6 pt-4">
+            <v-btn elevation="0" :to="`/post/${post.id}`" color="#64CCC5" class="btnInfo text-white">En savoir plus</v-btn>
+          </div>
+        </v-card>
       </section>
     </div>
   </div>
@@ -17,32 +24,23 @@
 <script lang="ts" setup>
 import Caroussel from '@/components/Caroussel.vue'
 
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
 
 
-const posts = reactive([
-  {
-    src:"https://picsum.photos/1300/1080",
-    title: 'premier titre',
-    description : 'premiere description Just add your desired image size after our URL, and youll get a random image.'
-  },
-  {
-    src:"https://picsum.photos/1300/1080",
-    title: 'deuxieme titre',
-    description : 'deuxieme description Just add your desired image image.'
-  },
-  {
-    src:"https://picsum.photos/1300/1080",
-    title: 'troisieme titre',
-    description : 'troisieme description after our URL, and youll get a random image.'
-  },
-  {
-    src:"https://picsum.photos/1300/1080",
-    title: 'quatrieme titre',
-    description : 'quatrieme description Just add your desired image after our URL, and youll get a random image.'
-  }
+const posts : any = reactive([])
 
-])
+async function getPosts () {
+  try {
+    for (let i = 0; i < 4; i++) {
+      const response = await fetch('https://picsum.photos/1300/1080');
+      posts.push({'id' : i , 'src' : response.url , 'title' : `titre n ${i + 1}` , description : 'lorem ipsum dolor si'})
+    }
+  } catch (e) {
+    console.log(e)
+  }  
+}
+
+getPosts()
 </script>
 
 <style scoped>
@@ -53,7 +51,7 @@ const posts = reactive([
   display:flex;
   flex-direction: column;
   align-items: center;
-  max-width:1000px;
+  max-width:1200px;
 }
 .subContainer{
   width:100%;
@@ -67,5 +65,19 @@ const posts = reactive([
 .posts img{
   width:300px;
   height:200px;
+}
+
+.float-right{
+  float: right;
+  margin-left: 15px;
+}
+.float-left{
+  float: left;
+  margin-right: 15px;
+}
+.btnDiv{
+  display:flex;
+  width:100%;
+  justify-content: right;
 }
 </style>
