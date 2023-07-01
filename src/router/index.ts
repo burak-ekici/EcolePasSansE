@@ -47,6 +47,14 @@ const routes = [
       import(/* webpackChunkName: "canlendar" */ "@/views/LoginPage.vue"),
   },
   {
+    path: "/post/:id",
+    name: "Post",
+    props: true,
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/Post.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     meta: { layout: "DefaultLayout" },

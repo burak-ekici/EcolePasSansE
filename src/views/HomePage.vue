@@ -23,24 +23,15 @@
 
 <script lang="ts" setup>
 import Caroussel from '@/components/Caroussel.vue'
+import { usePostsStore } from '@/store/PostsStore';
+import { storeToRefs } from 'pinia'
 
-import { onMounted, reactive } from 'vue';
+const postsStore = usePostsStore()
+postsStore.$reset()
+postsStore.getPosts()
 
+const { posts } = storeToRefs(postsStore)
 
-const posts : any = reactive([])
-
-async function getPosts () {
-  try {
-    for (let i = 0; i < 4; i++) {
-      const response = await fetch('https://picsum.photos/1300/1080');
-      posts.push({'id' : i , 'src' : response.url , 'title' : `titre n ${i + 1}` , description : 'lorem ipsum dolor si'})
-    }
-  } catch (e) {
-    console.log(e)
-  }  
-}
-
-getPosts()
 </script>
 
 <style scoped>

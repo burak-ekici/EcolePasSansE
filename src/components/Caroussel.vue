@@ -7,7 +7,7 @@
     interval="5000"
   >
     <v-carousel-item
-      v-for="post in props.posts"
+      v-for="post in carouselItems"
       :key="post.title"
       cover
       :src="post.src"
@@ -19,18 +19,20 @@
       <div class="carouselItemContent">
         <h3></h3>
         <p>{{post.description}}</p>
-        <v-btn color="#64CCC5" class="mt-6 text-white">En savoir plus</v-btn>
+        <v-btn :to="`/post/${post.id}`" color="#64CCC5" class="mt-6 text-white">En savoir plus</v-btn>
       </div>
     </v-carousel-item>
   </v-carousel>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
+const props = defineProps(['posts']);
 
 
-const props = defineProps(['posts'])
-
+const carouselItems = computed(() => {
+  return props.posts.slice(0,3)
+})
 
 </script>
 

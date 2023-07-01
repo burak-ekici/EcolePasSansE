@@ -2,7 +2,7 @@
   <v-app>
     <!-- ce component charge le layout ( default ou kids) qui contient la narvbar et un slot default -->
     <component :key="layout" :is="layout ||'div'"> 
-        <router-view /> <!-- le router-view prendra la place du slot dans le layout -->
+        <router-view :key="`${$route.path}${JSON.stringify($route.query)}`" /> <!-- le router-view prendra la place du slot dans le layout -->
     </component>
   </v-app>
 </template>
