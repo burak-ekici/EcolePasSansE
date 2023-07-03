@@ -3,20 +3,21 @@
     <div class="subContainer">
       <h2 class="text-center mb-8 block">News</h2>
       <Caroussel :posts="posts" />
-      <section class="posts">
-        <v-card class="mt-6 pb-6" style="position:relative"  v-for="(post, index) in posts" :key="post.title">
+      <section v-if="posts.length" class="posts">
+        <v-card class="mt-6 pb-6" style="position:relative"  v-for="(post, index) in postsToShow" :key="post.title">
           <v-toolbar color="#176B87" border class="text-white">
             <v-toolbar-title >{{ post.title }}</v-toolbar-title>
           </v-toolbar>
           <div class="pa-6">
             <img :class="{'float-right' : index % 2 , 'float-left' : !(index % 2) }" :src="post.src" alt="">
-            <p>{{post.description}}</p>
+            <p>{{ raccourcirLeText(post.description,50) }} ...</p>
           </div>
           <div class="btnDiv pr-6 pt-4">
             <v-btn elevation="0" :to="`/post/${post.id}`" color="#64CCC5" class="btnInfo text-white">En savoir plus</v-btn>
           </div>
         </v-card>
       </section>
+      <div v-intersect="loadMorePosts"></div>
     </div>
   </div>
 </template>
@@ -25,12 +26,25 @@
 import Caroussel from '@/components/Caroussel.vue'
 import { usePostsStore } from '@/store/PostsStore';
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue';
 
 const postsStore = usePostsStore()
-postsStore.$reset()
-postsStore.getPosts()
-
+// recupere les posts via le store
 const { posts } = storeToRefs(postsStore)
+
+const postsToShow = ref(posts.value.slice(0,5))
+
+function loadMorePosts() {
+  const startIndex = postsToShow.value.length
+  const arrayToPush = posts.value.slice(startIndex, startIndex +5)
+  arrayToPush.forEach(el => {
+    postsToShow.value.push(el)
+  })
+}
+
+function raccourcirLeText(text: string, longueurMax: number) :string {
+  return text.split(' ').slice(0,longueurMax).join(' ')
+}
 
 </script>
 

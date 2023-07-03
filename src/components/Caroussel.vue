@@ -18,7 +18,7 @@
     </v-toolbar>
       <div class="carouselItemContent">
         <h3></h3>
-        <p>{{post.description}}</p>
+        <p>{{post.short}}</p>
         <v-btn :to="`/post/${post.id}`" color="#64CCC5" class="mt-6 text-white">En savoir plus</v-btn>
       </div>
     </v-carousel-item>
@@ -33,6 +33,10 @@ const props = defineProps(['posts']);
 const carouselItems = computed(() => {
   return props.posts.slice(0,3)
 })
+
+function short(text) {
+  return text.split('').slice(0,20).join('')
+}
 
 </script>
 

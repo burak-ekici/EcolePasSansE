@@ -12,6 +12,7 @@ import { watch, shallowRef, ShallowRef } from 'vue';
 import { storeToRefs } from 'pinia'
 import layouts from "@/layouts/layouts";
 import { useGlobalStore } from '@/store/globalStore';
+import { usePostsStore } from '@/store/PostsStore';
 
 const globalStore = useGlobalStore()
 
@@ -27,5 +28,8 @@ watch(layoutName, () => {
   layout.value = layouts[layoutName.value];
 });
 
+// creer les posts dans le state
+const postsStore = usePostsStore()
+postsStore.getPosts()
 
 </script>
