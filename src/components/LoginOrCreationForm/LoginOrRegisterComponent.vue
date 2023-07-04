@@ -73,6 +73,7 @@ a {
   justify-content: space-between;
   overflow: hidden;
 
+
   .imageSection{
     width:55%;
     background-color: $fourth-color;
@@ -87,6 +88,7 @@ a {
     will-change: left , right;
     transition:all 0.2s;
     overflow: hidden;
+    
 
     &.isRegisterSection{
       transform:translateX(-81.8%);
@@ -110,8 +112,9 @@ a {
     .logo{
       width:100px;
       position: absolute;
-      left:10%;
+      left:4.5%;
       top:3%;
+      border-radius: 50%;
     }
     .image1, .image2{
       width:90%;

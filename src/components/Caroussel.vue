@@ -9,6 +9,7 @@
     <v-carousel-item
       v-for="post in carouselItems"
       :key="post.title"
+      :alt="post.alt"
       cover
       :src="post.src"
       
@@ -34,9 +35,6 @@ const carouselItems = computed(() => {
   return props.posts.slice(0,3)
 })
 
-function short(text) {
-  return text.split('').slice(0,20).join('')
-}
 
 </script>
 

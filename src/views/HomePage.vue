@@ -5,8 +5,10 @@
       <Caroussel :posts="posts" />
       <section v-if="posts.length" class="posts">
         <v-card class="mt-6 pb-6" style="position:relative"  v-for="(post, index) in postsToShow" :key="post.title">
-          <v-toolbar color="#176B87" border class="text-white">
+          <v-toolbar color="#176B87" border class="text-white pr-3">
             <v-toolbar-title >{{ post.title }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <p>publié le {{ getformatedDate(post.publish_date) + ' à ' +  getHourFromDate(post.publish_date)}}</p>
           </v-toolbar>
           <div class="pa-6">
             <img :class="{'float-right' : index % 2 , 'float-left' : !(index % 2) }" :src="post.src" alt="">
@@ -44,6 +46,15 @@ function loadMorePosts() {
 
 function raccourcirLeText(text: string, longueurMax: number) :string {
   return text.split(' ').slice(0,longueurMax).join(' ')
+}
+
+function getformatedDate(dateToModify: string) : string {
+  const date = dateToModify.split(' ')[0]
+  return date.split('-').join('/')
+}
+
+function getHourFromDate(dateToModify : string) : string {
+  return dateToModify.split(' ')[1].slice(0,5)
 }
 
 </script>

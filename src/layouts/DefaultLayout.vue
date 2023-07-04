@@ -31,5 +31,7 @@ import Navbar from '@/components/Navbar.vue'
   height : 100%;
   width:100%;
   padding-left:55px;
+  position: relative;
 }
+
 </style>

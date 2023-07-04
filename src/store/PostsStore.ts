@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { PostsInterface } from "@/interfaces/postsInterface";
+import { PostsInterface } from "@/interfaces/postInterface";
 import DATA from '../../DATA.json'
 
 export const usePostsStore = defineStore("postsStore", {

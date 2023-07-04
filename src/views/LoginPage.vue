@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-  <v-window>
+  <div class="container bg-secondary-color">
+  <v-window >
     <loginOrRegisterComponent />
   </v-window>
   </div>
@@ -18,7 +18,6 @@ import loginOrRegisterComponent from '@/components/LoginOrCreationForm/LoginOrRe
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('@/assets/bg.jpg');
   background-position:center;
   background-size: cover;
 }
