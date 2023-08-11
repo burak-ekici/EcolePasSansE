@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary-color container" style="height: 100vh;width:100vw; overflow: hidden; display: flex;">
+  <div class="bg-secondary-color container" style="height: 100vh;width:calc(100vw - 72px); overflow: hidden; display: flex;">
     <div class="aside" :class="{'noUserSelected' : !selectedUser}">
       <v-list>
         <v-list-item><h2 class="mb-6">Messagerie</h2></v-list-item>
@@ -14,7 +14,7 @@
         <v-divider></v-divider>
       </v-list>
     </div>
-    <Tchat :messages="messagesToProps" />
+    <Tchat style="width:75%" :messages="messagesToProps" />
   </div>
 </template>
 
@@ -28,12 +28,10 @@ const filteredMessages = messages.filter(el => el.to_user_id !== el.from_user_id
 console.log(filteredMessages);
 function selectUser(id: number): void {
   selectedUser.value = id
-  console.log(selectedUser.value)
 }
 const messagesToProps = computed(() => {
   return filteredMessages.filter(message => message.to_user_id === selectedUser.value && message.from_user_id === 4)
-}
-)
+})
 
 </script>
 

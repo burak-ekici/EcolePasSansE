@@ -12,7 +12,7 @@
       prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
       title="John Leider"
       nav
-      style="flex-grow :0"
+      style="flex-grow: 0"
     >
       <template v-slot:append>
         <v-btn
@@ -24,11 +24,23 @@
     </v-list-item>
 
     <v-divider></v-divider>
-    <v-list 
-    density="compact" 
-    class="text-white"
-    style="top:50%; transform: translateY(-50%)"
-    nav
+    <!-- Changer d'utilisateur -->
+    <v-list density="compact" nav >
+      <v-list-item
+        @click="navigateTo('/switchUser')"
+        :active="isActive('/switchUser')"
+        prepend-icon="mdi-swap-horizontal"
+        title="Changer d'utilisateur"
+        value="switchUser"
+      ></v-list-item>
+    </v-list>
+
+    <!-- Menu navbar -->
+    <v-list
+      density="compact"
+     
+      style="top: 50%; transform: translateY(-50%)"
+      nav
     >
       <v-list-item
         @click="navigateTo('/')"
@@ -66,7 +78,7 @@
         value="calendrier"
       ></v-list-item>
     </v-list>
-    
+
     <template v-slot:append>
       <v-list-item
         prepend-icon="mdi-logout"
@@ -75,7 +87,6 @@
         class="mb-4 logoutbutton"
       ></v-list-item>
     </template>
-
   </v-navigation-drawer>
 </template>
 
@@ -87,24 +98,24 @@ const drawer: Ref<boolean> = ref(true);
 const rail: Ref<boolean> = ref(true);
 
 function navigateTo(pageName: string): void {
-  rail.value = true
-  router.push(pageName)
+  rail.value = true;
+  router.push(pageName);
 }
-function isActive(routePath : string) : boolean {
+function isActive(routePath: string): boolean {
   return router.currentRoute.value.path === routePath;
 }
 </script>
 
 <style scoped lang="scss">
-@import '../styles/settings.scss';
+@import "../styles/settings.scss";
 
-.logoutbutton{
-  cursor:pointer;
+.logoutbutton {
+  cursor: pointer;
 }
-.drawer{
+.drawer {
   background-color: $primary-color !important;
 }
-.logoutbutton:hover{
+.logoutbutton:hover {
   background: $secondary-color;
 }
 </style>

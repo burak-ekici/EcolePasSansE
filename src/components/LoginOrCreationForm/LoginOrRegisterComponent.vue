@@ -14,11 +14,6 @@
     </transition>
 
     <div class="imageSection" :class="{ isRegisterSection}">
-      <img class="logo" src="@/assets/logoEcole.png" alt="logo du site web : Logo pas sans E">
-      <div class="imagesContainer" :class="{ isRegisterSection}">
-        <img class="image1" src='@/assets/kid-sitting-on-book3.jpg' alt="un enfant assis sur des livres, lisant un livre tout en souriant">
-        <img class="image2" src='@/assets/enfant-biceps2-removebg.png' alt="un enfant assis sur des livres, lisant un livre tout en souriant">
-      </div>
     </div>
 
   </div>
@@ -88,6 +83,10 @@ a {
     will-change: left , right;
     transition:all 0.2s;
     overflow: hidden;
+    background: url('@/assets/logoEcole.png') ;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     
 
     &.isRegisterSection{
@@ -117,8 +116,8 @@ a {
       border-radius: 50%;
     }
     .image1, .image2{
-      width:90%;
-      height:90%;
+      width:100%;
+      height:100%;
     }
   }
   
