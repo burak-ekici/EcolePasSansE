@@ -79,10 +79,9 @@
 </template>
 
 <script lang="ts" setup>
-import { toRef } from "vue";
-const props: any = defineProps(["messages"]);
-const { messages } = toRef(props.messages);
-console.log(messages);
+
+
+
 </script>
 
 <style scoped lang="scss">

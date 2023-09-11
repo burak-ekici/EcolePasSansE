@@ -55,6 +55,13 @@ const routes = [
       import(/* webpackChunkName: "canlendar" */ "@/views/Post.vue"),
   },
   {
+    path: "/profile",
+    name: "Profile",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/Profile.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     meta: { layout: "DefaultLayout" },
