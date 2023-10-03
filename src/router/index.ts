@@ -104,7 +104,16 @@ function checkIfUserIsConnected(to , from , next) {
     }
     
   } else {
-    next({path: '/login'})
+    // J'ai fait un if else car j'avais une  erreur de potentiel boucle puisque lorsque j'appuyer sur 
+    // se connecter ( qui me dirige sur la page login ), le guard me  redirigait encore sur la page login
+    // puisque j'ai une protection guard generale qui redirige sur la page login lorsque l'utilisateur accede  
+    // a des pages qu'il ne devrait pas 
+    if (to.path !== '/login') {
+      next({path: '/login'})
+      return
+    } else {
+      next()
+    }
   } 
 }
 

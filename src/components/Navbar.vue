@@ -98,7 +98,7 @@
       </template>
     </v-list>
 
-    <template v-slot:append>
+    <template v-if="isUserConnected" v-slot:append>
       <v-list-item
         prepend-icon="mdi-logout"
         title="Deconnexion"
