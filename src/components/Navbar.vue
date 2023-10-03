@@ -8,25 +8,41 @@
     @mouseenter="rail = false"
     @mouseleave="rail = true"
   >
-    <v-list-item
-      prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-      title="John Leider"
-      nav
-      style="flex-grow: 0"
-    >
-      <template v-slot:append>
-        <v-btn
-          variant="text"
-          icon="mdi-chevron-left"
-          @click.stop="rail = !rail"
-        ></v-btn>
-      </template>
-    </v-list-item>
+      <!-- icone quand le user est connecté -->
+      <v-list-item
+        v-if="isUserConnected"
+        prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
+        title="John Leider"
+        style="flex-grow: 0"
+        nav
+      >
+        <template v-slot:append>
+          <v-btn
+            variant="text"
+            icon="mdi-chevron-left"
+            @click.stop="rail = !rail"
+          ></v-btn>
+        </template>
+      </v-list-item>
+
+      <!-- Quand le user n'est pas connecté  -->
+      <v-list-item
+        v-else
+        prepend-icon="mdi-account"
+        title="Se connecter"
+        style="flex-grow: 0; cursor:pointer"
+        @click="redirectToLoginPage()"
+      ></v-list-item>
+    
+    
+      
+  
 
     <v-divider></v-divider>
     <!-- Changer d'utilisateur -->
-    <v-list density="compact" nav >
+    <v-list density="compact" nav>
       <v-list-item
+        v-if="isUserConnected"
         @click="navigateTo('/switchUser')"
         :active="isActive('/switchUser')"
         prepend-icon="mdi-swap-horizontal"
@@ -36,12 +52,7 @@
     </v-list>
 
     <!-- Menu navbar -->
-    <v-list
-      density="compact"
-     
-      style="top: 50%; transform: translateY(-50%)"
-      nav
-    >
+    <v-list density="compact" style="top: 50%; transform: translateY(-50%)" nav>
       <v-list-item
         @click="navigateTo('/')"
         :active="isActive('/')"
@@ -93,6 +104,12 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import router from "@/router";
+import { useUserStore } from '@/store/userStore';
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+
+const { isUserConnected } = storeToRefs(userStore)
 
 const drawer: Ref<boolean> = ref(true);
 const rail: Ref<boolean> = ref(true);
@@ -101,6 +118,13 @@ function navigateTo(pageName: string): void {
   rail.value = true;
   router.push(pageName);
 }
+
+function redirectToLoginPage() :void{
+  if (router.currentRoute.value.fullPath !== '/login') {
+    router.push('/login')
+  }
+}
+
 function isActive(routePath: string): boolean {
   return router.currentRoute.value.path === routePath;
 }
