@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore('userStore', {
   state: ()=>{
     return {
-      connected : false
+      connected : true as boolean
     }
   },
   getters: {

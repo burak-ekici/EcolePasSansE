@@ -25,7 +25,6 @@ import { Ref, computed, ref } from 'vue';
 
 const selectedUser :Ref<number | null> = ref(null)
 const filteredMessages = messages.filter(el => el.to_user_id !== el.from_user_id);
-console.log(filteredMessages);
 function selectUser(id: number): void {
   selectedUser.value = id
 }

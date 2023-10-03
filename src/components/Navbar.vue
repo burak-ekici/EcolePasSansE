@@ -30,6 +30,7 @@
         v-else
         prepend-icon="mdi-account"
         title="Se connecter"
+        class="ButtonSeConnecter"
         style="flex-grow: 0; cursor:pointer"
         @click="redirectToLoginPage()"
       ></v-list-item>
@@ -60,34 +61,41 @@
         title="Acceuil"
         value="acceuil"
       ></v-list-item>
-      <v-list-item
-        @click="navigateTo('/messagerie')"
-        :active="isActive('/messagerie')"
-        prepend-icon="mdi-forum"
-        title="Messagerie"
-        value="messagerie"
-      ></v-list-item>
-      <v-list-item
-        @click="navigateTo('/files')"
-        :active="isActive('/files')"
-        prepend-icon="mdi-file"
-        title="File"
-        value="file"
-      ></v-list-item>
-      <v-list-item
-        @click="navigateTo('/activites')"
-        :active="isActive('/activites')"
-        prepend-icon="mdi-ticket"
-        title="Activités"
-        value="activités"
-      ></v-list-item>
-      <v-list-item
-        @click="navigateTo('/calendar')"
-        :active="isActive('/calendar')"
-        prepend-icon="mdi-calendar-month"
-        title="Calendrier"
-        value="calendrier"
-      ></v-list-item>
+      <template v-if="isUserConnected">
+
+        <v-list-item
+          @click="navigateTo('/messagerie')"
+          :active="isActive('/messagerie')"
+          prepend-icon="mdi-forum"
+          title="Messagerie"
+          value="messagerie"
+        ></v-list-item>
+
+        <v-list-item
+          @click="navigateTo('/files')"
+          :active="isActive('/files')"
+          prepend-icon="mdi-file"
+          title="File"
+          value="file"
+        ></v-list-item>
+
+        <v-list-item
+          @click="navigateTo('/activites')"
+          :active="isActive('/activites')"
+          prepend-icon="mdi-ticket"
+          title="Activités"
+          value="activités"
+        ></v-list-item>
+
+        <v-list-item
+          @click="navigateTo('/calendar')"
+          :active="isActive('/calendar')"
+          prepend-icon="mdi-calendar-month"
+          title="Calendrier"
+          value="calendrier"
+        ></v-list-item>
+
+      </template>
     </v-list>
 
     <template v-slot:append>
@@ -141,5 +149,9 @@ function isActive(routePath: string): boolean {
 }
 .logoutbutton:hover {
   background: $secondary-color;
+}
+
+.ButtonSeConnecter:hover{
+  background:$secondary-color;
 }
 </style>

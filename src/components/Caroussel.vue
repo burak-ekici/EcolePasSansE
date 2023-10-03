@@ -12,16 +12,17 @@
       :alt="post.alt"
       cover
       :src="post.src"
-      
+
     >
     <v-toolbar color="#001C30">
-      <v-toolbar-title class="text-center text-white text-button font-weight-medium">{{post.title}}</v-toolbar-title>
+      <v-toolbar-title class="text-center text-white text-button font-weight-bold">{{post.title}}</v-toolbar-title>
     </v-toolbar>
+
       <div class="carouselItemContent">
-        <h3></h3>
-        <p>{{post.short}}</p>
-        <v-btn :to="`/post/${post.id}`" color="#64CCC5" class="mt-6 text-white">En savoir plus</v-btn>
+        <p class="font-weight-bold" style="text-shadow: 2px 1px 3px #000;">{{post.short}}</p>
+        <v-btn :to="`/post/${post.id}`" color="#64CCC5" class="mt-6 text-white ">En savoir plus</v-btn>
       </div>
+
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -52,4 +53,5 @@ h3{
 p{
   color:white;
 }
+
 </style>

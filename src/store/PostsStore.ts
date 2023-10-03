@@ -12,6 +12,17 @@ export const usePostsStore = defineStore("postsStore", {
     async getPosts() {
       try {
         this.posts = DATA; 
+        for (let post of this.posts) {
+          const url = post.src;
+
+          const response = await fetch(url);
+
+          if (response.status === 200) {
+            const imageBlob = await response.blob();
+            const imageObjectURL = URL.createObjectURL(imageBlob);
+            post.src = imageObjectURL;
+          }
+        }
       } catch (e) {
         console.log(e);
       }  
