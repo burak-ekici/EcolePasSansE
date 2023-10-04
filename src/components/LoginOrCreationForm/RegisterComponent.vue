@@ -12,7 +12,7 @@
         Vous avez dejà un compte ?
         <a @click="switchToLoginSection">Se connecter</a>
       </h4>
-      <v-form class="mt-12" @submit.prevent="checkRegisterForm">
+      <v-form class="mt-12" @submit.prevent="registeraccount">
         <v-text-field
           class="mb-2"
           type="text"
@@ -20,6 +20,7 @@
           bg-color="#fcfcfc"
           label="Nom d'utilisateur"
           append-inner-icon="mdi-account"
+          v-model="username"
         >
         </v-text-field>
         <v-text-field
@@ -29,6 +30,7 @@
           bg-color="#fcfcfc"
           label="Email"
           append-inner-icon="mdi-email"
+          v-model="email"
         >
         </v-text-field>
         <v-text-field
@@ -38,6 +40,7 @@
           bg-color="#fcfcfc"
           label="Mot de passe"
           append-inner-icon="mdi-lock"
+          v-model="password"
         >
         </v-text-field>
         <v-btn color="#176B87" class="text-white py-6" block type="submit"
@@ -49,6 +52,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref, Ref } from 'vue';
+import { useUserStore } from '@/store/userStore';
+
+const username : Ref<string> = ref('');
+const email : Ref<string> = ref('');
+const password: Ref<string> = ref('');
+
+const userStore = useUserStore();
 
 
 const emit = defineEmits(['switchToLoginSection','registerValidated'])
@@ -57,8 +68,10 @@ function switchToLoginSection() : void{
   emit('switchToLoginSection')
 }
 
-function checkRegisterForm() {
-  emit('registerValidated')
+async function registeraccount() {
+  console.log(email.value, password.value)
+  await userStore.createAccount(email.value, password.value)
+  // emit('registerValidated')
 }
 
 </script>

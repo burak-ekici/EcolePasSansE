@@ -25,7 +25,9 @@ function switchToRegisterSection() : void{
 }
 
 function checkForm() {
-  emit('loginValidated')
+  if (true) {
+    emit('loginValidated')
+  }
 }
 
 </script>
