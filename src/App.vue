@@ -23,7 +23,7 @@ const userStore = useUserStore();
 
 async function watchIfOpenSession() {
   const currentUser = await userStore.seeCurrentUser();
-  if (currentUser.data.session !== null) {
+  if (currentUser.data.session) {
     userStore.switchStoreUserConnectedStateToTrue()
   }
 }

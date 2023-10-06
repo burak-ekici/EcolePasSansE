@@ -20,7 +20,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/MessagingPage.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventNotConnectedUserToRenderThisPage],
   },
   {
     path: "/files",
@@ -28,7 +28,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/FilesPage.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventNotConnectedUserToRenderThisPage],
   },
   {
     path: "/activites",
@@ -36,7 +36,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/ActivityPage.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventNotConnectedUserToRenderThisPage],
   },
   {
     path: "/calendar",
@@ -44,7 +44,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/CalendarPage.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventNotConnectedUserToRenderThisPage],
   },
   {
     path: "/login",
@@ -52,7 +52,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/LoginPage.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventConnectedUserToGoOnLoginPage],
   },
   {
     path: "/post/:id",
@@ -68,7 +68,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/Profile.vue"),
-    beforeEnter: [checkIfUserIsConnected],
+    beforeEnter: [preventNotConnectedUserToRenderThisPage],
   },
   {
     path: "/:pathMatch(.*)*",
@@ -91,17 +91,29 @@ router.afterEach((to) => {
 
 
 
-function checkIfUserIsConnected(to , from , next) {
-  const userStore: any = useUserStore();
+async function preventConnectedUserToGoOnLoginPage( to , from , next) {
+  const userStore = useUserStore();
   const { connected } = storeToRefs(userStore);
-  if (connected) {
-    if (to.path === '/login') {
-      router.back()
-    } else {
-      next()
-    }
+  if (connected.value) {
+    router.back()
   } else {
+    next()
+  }
+}
+
+async function preventNotConnectedUserToRenderThisPage(to, from, next) {
+  const userStore = useUserStore();
+  const { connected, isConnectionChecked } = storeToRefs(userStore);
+  if (!isConnectionChecked.value) {
+    const currentUser = await userStore.seeCurrentUser();
+    if (currentUser.data.session) {
+      userStore.switchStoreUserConnectedStateToTrue();
+    }
+  }
+  if (!connected.value) {
     router.push('/login')
+  } else {
+    next()
   }
 }
 

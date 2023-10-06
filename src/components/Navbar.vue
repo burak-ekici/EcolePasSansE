@@ -130,9 +130,7 @@ function navigateTo(pageName: string): void {
 }
 
 function redirectToLoginPage() :void{
-  if (router.currentRoute.value.fullPath !== '/login') {
-    router.push('/login')
-  }
+  router.push('/login')
 }
 
 function redirectToProfilePage() {

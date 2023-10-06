@@ -5,8 +5,9 @@ import {supabase} from '../supabaseConfig/supabaseClient'
 export const useUserStore = defineStore('userStore', {
   state: ()=>{
     return {
-      connected : false as boolean
-    }
+      connected: false as boolean,
+      isConnectionChecked: false, // variable qui permet d'empecher d'envoyer des requêtes au serveur pour chaque changement de page sur page necessitant un check de conexion , car l'application n'a pas le temp de changer la valeur de connected et donc empeche la navigation sur les pages via le lien ( celui ci recharge la page et donc reset le store ) necéssitant une connexion même si l'on est connecté. via la navigation normal, il n'y a aucun soucis
+    };
   },
   getters: {
     isUserConnected : (state) => {
@@ -21,7 +22,7 @@ export const useUserStore = defineStore('userStore', {
           password : password
         })
         if (error) throw error
-        this.connected = true
+        this.switchStoreUserConnectedStateToTrue();
         const actualUser = await this.seeCurrentUser();
         console.log(actualUser);
         return data
@@ -40,15 +41,14 @@ export const useUserStore = defineStore('userStore', {
         let actualUser = await this.seeCurrentUser()
         if (actualUser.data.session === null) {
           const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
+            email: email,
+            password: password,
           });
           if (error) {
             throw error;
           } else {
-            this.connected = true;
+            this.switchStoreUserConnectedStateToTrue();
             actualUser = await this.seeCurrentUser()
-            console.log(actualUser);
             return data;
           }
         } else {
@@ -80,6 +80,7 @@ export const useUserStore = defineStore('userStore', {
       return actualUser
     },
     switchStoreUserConnectedStateToTrue() {
+      this.isConnectionChecked = true;
       this.connected = true
     }
   }
