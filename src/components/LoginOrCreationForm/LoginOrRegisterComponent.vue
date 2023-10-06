@@ -10,7 +10,7 @@
     </transition>
 
     <transition name="validationTransition">
-      <registerValidation v-if="isRegistered" @closeRegisterPage="closeRegisterPage" class="validationComponent" />
+      <registerValidation v-if="isRegistered" class="validationComponent" />
     </transition>
 
     <div class="imageSection" :class="{ isRegisterSection}">
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue';
+import { ref, Ref } from 'vue';
 import loginComponent from './LoginComponent.vue'
 import registerComponent from './RegisterComponent.vue'
 import validation from './Validation.vue'
@@ -32,12 +32,6 @@ const isRegistered: Ref<boolean> = ref(false)
   
 function switchToRegisterSection() : void{
   isRegisterSection.value = true
-}
-
-function closeRegisterPage() {
-  console.log('ok')
-  isRegisterSection.value = false;
-  isRegistered.value = false;
 }
 
 function switchToLoginSection() :void{

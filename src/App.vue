@@ -13,10 +13,23 @@ import { storeToRefs } from 'pinia'
 import layouts from "@/layouts/layouts";
 import { useGlobalStore } from '@/store/globalStore';
 import { usePostsStore } from '@/store/PostsStore';
+import { useUserStore } from '@/store/userStore';
 
 const globalStore = useGlobalStore()
 
 const { layoutName } = storeToRefs(globalStore)
+
+const userStore = useUserStore();
+
+async function watchIfOpenSession() {
+  const currentUser = await userStore.seeCurrentUser();
+  if (currentUser.data.session !== null) {
+    userStore.switchStoreUserConnectedStateToTrue()
+  }
+}
+
+watchIfOpenSession()
+
 
 //shalowRef se comporte presque comme ref sauf que nous chargons ici un component,
 //shalowRef permet de regarder la surface seulement pour gagner en performance

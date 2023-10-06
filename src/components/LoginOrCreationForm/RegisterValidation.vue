@@ -3,9 +3,10 @@
   <!-- il est en position absolute -->
   <div class="validationContainer">
     <img class="checkImg" src="@/assets/validate.png" alt="validation, check logo">
+    <p class="text-h6 p1 font-weight-light text-center">Felicitation, vous êtes connecté !</p>
     <p class="text-h6 p1 font-weight-light text-center">Vous allez recevoir un mail pour finaliser votre inscription</p>
-    <p class="text-h6 p2 font-weight-medium text-center">Veuillez valider votre adresse Email !</p>
-    <a @click="closeRegisterPage">retourner sur la page de connexion</a>
+    <p class="text-h6 p2 font-weight-medium text-center">Veuillez valider votre adresse Email </p>
+    <router-link to='/'>Aller sur la page d'acceuil</router-link>
   </div>
 </template>
 
@@ -18,13 +19,6 @@ const tl = gsap.timeline()
 tl.from('.checkImg', { y: -200, duration : 0.2 , opacity :0},0.3)
 tl.from('.p1', { y: -200, duration : 0.6 , opacity :0 , delay:0.1})
 tl.from('.p2',{ y: -200, duration : 0.9 , opacity :0 , delay:0.2})
-
-
-const emit = defineEmits(['closeRegisterPage']);
-
-function closeRegisterPage() {
-  emit('closeRegisterPage')
-}
 
 onMounted(() => {
   const tl = gsap.timeline()

@@ -43,7 +43,7 @@
           v-model="password"
         >
         </v-text-field>
-        <v-btn color="#176B87" class="text-white py-6" block type="submit"
+        <v-btn :active="isRegisterButtonActive" :loading="isRegisterButtonLoading" color="#176B87" class="text-white py-6" block type="submit"
           >Creer</v-btn
         >
       </v-form>
@@ -58,6 +58,8 @@ import { useUserStore } from '@/store/userStore';
 const username : Ref<string> = ref('');
 const email : Ref<string> = ref('');
 const password: Ref<string> = ref('');
+const isRegisterButtonActive : Ref<boolean> = ref(true)
+const isRegisterButtonLoading : Ref<boolean> = ref(false)
 
 const userStore = useUserStore();
 
@@ -69,8 +71,22 @@ function switchToLoginSection() : void{
 }
 
 async function registeraccount() {
-  console.log(email.value, password.value)
-  await userStore.createAccount(email.value, password.value)
+  try {
+    isRegisterButtonActive.value = false;
+    isRegisterButtonLoading.value = true;
+    const response = await userStore.createAccount(email.value, password.value)
+    isRegisterButtonActive.value = true;
+    isRegisterButtonLoading.value = false;
+    if (!response.user) {
+      const error = { from : 'fonction registeraccount' , message : 'Une erreur est subvenue lors de la creation du compte'}
+      throw error
+    } else {
+      emit('registerValidated')
+    }
+  } catch (error) {
+    console.log(error)
+    alert(error.message)
+  }
   // emit('registerValidated')
 }
 

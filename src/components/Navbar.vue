@@ -14,6 +14,7 @@
         prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
         title="John Leider"
         style="flex-grow: 0"
+        @click="redirectToProfilePage"
         nav
       >
         <template v-slot:append>
@@ -53,7 +54,7 @@
     </v-list>
 
     <!-- Menu navbar -->
-    <v-list density="compact" style="top: 50%; transform: translateY(-50%)" nav>
+    <v-list density="compact" style="top: 42%; transform: translateY(-50%)" nav>
       <v-list-item
         @click="navigateTo('/')"
         :active="isActive('/')"
@@ -104,6 +105,7 @@
         title="Deconnexion"
         value="deconnexion"
         class="mb-4 logoutbutton"
+        @click="logout"
       ></v-list-item>
     </template>
   </v-navigation-drawer>
@@ -133,8 +135,19 @@ function redirectToLoginPage() :void{
   }
 }
 
+function redirectToProfilePage() {
+  router.push('/profile')
+}
+
 function isActive(routePath: string): boolean {
   return router.currentRoute.value.path === routePath;
+}
+
+async function logout() {
+  const response: boolean = await userStore.logout();
+  if (!(response == false)) {
+    console.log('deconnexion reussie')
+  }
 }
 </script>
 
