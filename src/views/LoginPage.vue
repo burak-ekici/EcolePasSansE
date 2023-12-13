@@ -1,13 +1,13 @@
 <template>
   <div class="container bg-secondary-color">
   <v-window >
-    <loginOrRegisterComponent />
+    <SwitchLogOrRegisterComponent />
   </v-window>
   </div>
 </template>
 
 <script lang="ts" setup>
-import loginOrRegisterComponent from '@/components/LoginOrCreationForm/LoginOrRegisterComponent.vue'
+import SwitchLogOrRegisterComponent from '@/components/LoginOrCreationForm/SwitchLogOrRegisterComponent.vue'
 
 </script>
 

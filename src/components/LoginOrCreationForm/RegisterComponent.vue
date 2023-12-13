@@ -1,6 +1,6 @@
 <template>
   <!-- comporte le texte et le formulaire de creation de compte ( section de droite ) -->
-  <div class="registerSection pa-8 pt-16">
+  <div class="registerSection pa-8 pt-8">
     <div>
       <h3
         class="text-h6 font-weight-medium text-button mt-12 text-medium-emphasis"
@@ -12,7 +12,12 @@
         Vous avez dejà un compte ?
         <a @click="switchToLoginSection">Se connecter</a>
       </h4>
-      <v-form class="mt-12" @submit.prevent="registeraccount">
+      <v-form class="mt-8" @submit.prevent="registeraccount">
+        <v-combobox
+          label="Profile"
+          :items="profileList"
+          v-model="profile"
+        ></v-combobox>
         <v-text-field
           class="mb-2"
           type="text"
@@ -43,7 +48,7 @@
           v-model="password"
         >
         </v-text-field>
-        <v-btn :active="isRegisterButtonActive" :loading="isRegisterButtonLoading" color="#176B87" class="text-white py-6" block type="submit"
+        <v-btn :active="isRegisterButtonActive" :loading="!isRegisterButtonActive" color="#176B87" class="text-white py-6" block type="submit"
           >Creer</v-btn
         >
       </v-form>
@@ -58,8 +63,9 @@ import { useUserStore } from '@/store/userStore';
 const username : Ref<string> = ref('');
 const email : Ref<string> = ref('');
 const password: Ref<string> = ref('');
+const profile: Ref<string> = ref('')
+const profileList = ['Parent', 'Psychologue' , 'Professeur'] 
 const isRegisterButtonActive : Ref<boolean> = ref(true)
-const isRegisterButtonLoading : Ref<boolean> = ref(false)
 
 const userStore = useUserStore();
 
@@ -72,11 +78,13 @@ function switchToLoginSection() : void{
 
 async function registeraccount() {
   try {
+    // on a besoin des deux variable car un bouton en loading
+    // est toujours cliquable, hors on veux prevenir cette etat
     isRegisterButtonActive.value = false;
-    isRegisterButtonLoading.value = true;
-    const response = await userStore.createAccount(email.value, password.value)
+    const response: any = await userStore.createAccount({ email : email.value, password :password.value, username : username.value, profile :profile.value })
     isRegisterButtonActive.value = true;
-    isRegisterButtonLoading.value = false;
+    // ajoute un utilisateur dans la table Users
+    // à ne pas confondre avec la creation d'account
     if (!response.user) {
       const error = { from : 'fonction registeraccount' , message : 'Une erreur est subvenue lors de la creation du compte'}
       throw error
@@ -85,10 +93,13 @@ async function registeraccount() {
     }
   } catch (error) {
     console.log(error)
-    alert(error.message)
+    if (error.message) {
+      alert(error.message)
+    }
   }
   // emit('registerValidated')
 }
+
 
 </script>
 

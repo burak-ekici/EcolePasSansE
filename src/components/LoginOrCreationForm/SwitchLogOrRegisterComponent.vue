@@ -6,7 +6,7 @@
     <registerComponent @registerValidated="isRegistered = true"  @switch-to-login-section="switchToLoginSection" />
 
     <transition name="validationTransition">
-      <validation v-if="isValidate" class="validationComponent" />
+      <ConnexionValidation v-if="isValidate" class="validationComponent" />
     </transition>
 
     <transition name="validationTransition">
@@ -23,7 +23,7 @@
 import { ref, Ref } from 'vue';
 import loginComponent from './LoginComponent.vue'
 import registerComponent from './RegisterComponent.vue'
-import validation from './Validation.vue'
+import ConnexionValidation from './ConnexionValidation.vue'
 import registerValidation from './RegisterValidation.vue'
 
 const isRegisterSection: Ref<boolean> = ref(false);

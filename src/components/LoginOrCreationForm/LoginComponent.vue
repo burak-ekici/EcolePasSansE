@@ -27,13 +27,13 @@ const password : Ref<string> = ref('')
 
 const emit = defineEmits(['switchToRegisterSection', 'loginValidated'])
 
-function switchToRegisterSection() : void{
+function switchToRegisterSection(): void{
   emit('switchToRegisterSection')
 }
 
 async function login() {
   const response = await userStore.login(email.value, password.value)
-  if (!response.user) {
+  if (!response) {
     console.log(response)
     alert('une erreur est survenue lors de la connexion')
   } else {

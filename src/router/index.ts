@@ -20,7 +20,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/MessagingPage.vue"),
-    beforeEnter: [preventNotConnectedUserToRenderThisPage],
+    beforeEnter: [preventFromNotConnectedUser],
   },
   {
     path: "/files",
@@ -28,7 +28,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/FilesPage.vue"),
-    beforeEnter: [preventNotConnectedUserToRenderThisPage],
+    beforeEnter: [preventFromNotConnectedUser],
   },
   {
     path: "/activites",
@@ -36,7 +36,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/ActivityPage.vue"),
-    beforeEnter: [preventNotConnectedUserToRenderThisPage],
+    beforeEnter: [preventFromNotConnectedUser],
   },
   {
     path: "/calendar",
@@ -44,7 +44,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/CalendarPage.vue"),
-    beforeEnter: [preventNotConnectedUserToRenderThisPage],
+    beforeEnter: [preventFromNotConnectedUser],
   },
   {
     path: "/login",
@@ -68,7 +68,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/Profile.vue"),
-    beforeEnter: [preventNotConnectedUserToRenderThisPage],
+    beforeEnter: [preventFromNotConnectedUser],
   },
   {
     path: "/:pathMatch(.*)*",
@@ -101,12 +101,12 @@ async function preventConnectedUserToGoOnLoginPage( to , from , next) {
   }
 }
 
-async function preventNotConnectedUserToRenderThisPage(to, from, next) {
+async function preventFromNotConnectedUser(to, from, next) {
   const userStore = useUserStore();
   const { connected, isConnectionChecked } = storeToRefs(userStore);
   if (!isConnectionChecked.value) {
     const currentUser = await userStore.seeCurrentUser();
-    if (currentUser.data.session) {
+    if (currentUser && currentUser.session.user) {
       userStore.switchStoreUserConnectedStateToTrue();
     }
   }

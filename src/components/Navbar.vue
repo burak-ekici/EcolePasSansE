@@ -10,9 +10,9 @@
   >
       <!-- icone quand le user est connecté -->
       <v-list-item
-        v-if="isUserConnected"
-        prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        title="John Leider"
+        v-if="user"
+        :prepend-avatar="avatar"
+        :title="username"
         style="flex-grow: 0"
         @click="redirectToProfilePage"
         nav
@@ -112,17 +112,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { ref, Ref, computed } from "vue";
 import router from "@/router";
 import { useUserStore } from '@/store/userStore';
 import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 
-const { isUserConnected } = storeToRefs(userStore)
+const { isUserConnected, user } = storeToRefs(userStore)
 
 const drawer: Ref<boolean> = ref(true);
 const rail: Ref<boolean> = ref(true);
+
+const avatar = computed((): string => {
+  if (typeof user.value.avatar === 'string' && user.value.avatar) {
+    return user.value.avatar
+  }
+  else {
+    return '/user-placeholder.png'
+  }
+})
+const username = computed(() : string => {
+  if (typeof user.value.username === 'string' && user.value.username) {
+    return user.value.username
+  } else {
+    return 'Pseudonyme'
+  }
+})
+
 
 function navigateTo(pageName: string): void {
   rail.value = true;
@@ -143,9 +160,10 @@ function isActive(routePath: string): boolean {
 
 async function logout() {
   const response: boolean = await userStore.logout();
-  if (!(response == false)) {
+  if (response === true) {
     console.log('deconnexion reussie')
   }
+  console.log(router)
 }
 </script>
 

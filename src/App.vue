@@ -16,15 +16,16 @@ import { usePostsStore } from '@/store/PostsStore';
 import { useUserStore } from '@/store/userStore';
 
 const globalStore = useGlobalStore()
+const userStore = useUserStore();
 
 const { layoutName } = storeToRefs(globalStore)
 
-const userStore = useUserStore();
-
 async function watchIfOpenSession() {
-  const currentUser = await userStore.seeCurrentUser();
-  if (currentUser.data.session) {
-    userStore.switchStoreUserConnectedStateToTrue()
+  const currentUser: any = await userStore.seeCurrentUser();
+  if (currentUser) {
+    userStore.switchStoreUserConnectedStateToTrue();
+  } else {
+    console.log()
   }
 }
 

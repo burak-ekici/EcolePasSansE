@@ -7,9 +7,10 @@ export interface UserInterface {
   firstname?: string,
   lastname?: string,
   registered_at: Date,
-  modified_at? : Date,
+  modified_at? : Date | string,
   city?: string,
   adress?: string,
   zip_code?: number,
-  profile_id: number
+  profile_id: number,
+  password : string
 }
