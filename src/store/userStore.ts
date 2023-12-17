@@ -1,6 +1,7 @@
 // Verifie l'etat du User : s'il est connecté ou non , l'id, le nom etc...
 import { defineStore } from "pinia";
 import { supabase } from "../supabaseConfig/supabaseClient";
+import User from '@/interfaces/userInterface'
 import router from "@/router";
 // verifie si un utilisateur est connecté lors de l'initialisation de l'application
 
@@ -8,15 +9,11 @@ import router from "@/router";
 export const useUserStore = defineStore("userStore", {
   state: () => {
     return {
-      user : null as boolean | any,
-      connected: false as boolean,
-      isConnectionChecked: false, // variable qui permet d'empecher d'envoyer des requêtes au serveur pour chaque changement de page sur page necessitant un check de conexion , car l'application n'a pas le temp de changer la valeur de connected et donc empeche la navigation sur les pages via le lien ( celui ci recharge la page et donc reset le store ) necéssitant une connexion même si l'on est connecté. via la navigation normal, il n'y a aucun soucis
+      user : null as User |null,
     };
   },
   getters: {
-    isUserConnected: (state) => {
-      return state.connected;
-    },
+  
   },
   actions: {
     async createAccount({ email , password , profile , username }) {
@@ -27,7 +24,7 @@ export const useUserStore = defineStore("userStore", {
         });
         if (error) throw error;
         if (data.user) {
-          this.createUser({ profile , username , email, password, id : data.user.id });
+          this.createUser({ profile , username , email, id : data.user.id });
           this.switchStoreUserConnectedStateToTrue();
           return data;
         }
@@ -39,7 +36,7 @@ export const useUserStore = defineStore("userStore", {
         return error;
       }
     },
-    async createUser({ profile, username, email, password , id }) {
+    async createUser({ profile, username, email , id }) {
       const userProfile_id = await this.getUserProfile(profile);
       if (userProfile_id) {
         const { data, error } = await supabase.from("Users").insert([
@@ -56,7 +53,6 @@ export const useUserStore = defineStore("userStore", {
             adress: "",
             zip_code: 0,
             profile_id: userProfile_id,
-            password: password,
           },
         ]);
         if (data) {
@@ -67,6 +63,46 @@ export const useUserStore = defineStore("userStore", {
         if (error) {
           console.error("Erreur lors de l'ajout de l'élément:", error);
         }
+      }
+      return null
+    },
+    async updateUser({ id, username , firstname , lastname , email , avatar , adress , profile_id, zip_code ,city } : User) {
+      try {
+        const { data, error } = await supabase
+          .from("Users")
+          .update({
+            username,
+            firstname,
+            lastname,
+            email,
+            avatar,
+            adress,
+            profile_id,
+            zip_code,
+            city,
+            modified_at: new Date(Date.now()),
+          })
+          .eq( 'id' , id )
+          .select();
+        if (error) throw error;
+        if (data) {
+          return data;
+        }
+        return null;
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async uploadAvatarImage(file, userId) {
+      if (file && userId) {
+        const { data, error } = await supabase.storage
+          .from("avatars")
+          .upload(`/${userId}/`, file);
+        if (error) {
+          console.error("Error uploading image:", error);
+          return null;
+        }
+        return data;
       }
       return null
     },
@@ -81,7 +117,6 @@ export const useUserStore = defineStore("userStore", {
           if (data.user) {
             this.connected = true;
             this.user = await this.getUserInfo(data.user.id);
-            console.log(this.user)
             return data
           }
           if (error) {

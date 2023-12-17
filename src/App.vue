@@ -13,23 +13,9 @@ import { storeToRefs } from 'pinia'
 import layouts from "@/layouts/layouts";
 import { useGlobalStore } from '@/store/globalStore';
 import { usePostsStore } from '@/store/PostsStore';
-import { useUserStore } from '@/store/userStore';
 
 const globalStore = useGlobalStore()
-const userStore = useUserStore();
-
 const { layoutName } = storeToRefs(globalStore)
-
-async function watchIfOpenSession() {
-  const currentUser: any = await userStore.seeCurrentUser();
-  if (currentUser) {
-    userStore.switchStoreUserConnectedStateToTrue();
-  } else {
-    console.log()
-  }
-}
-
-watchIfOpenSession()
 
 
 //shalowRef se comporte presque comme ref sauf que nous chargons ici un component,

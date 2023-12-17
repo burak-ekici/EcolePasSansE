@@ -15,7 +15,7 @@
       <v-form class="mt-8" @submit.prevent="registeraccount">
         <v-combobox
           label="Profile"
-          :items="profileList"
+          :items="profileList.value"
           v-model="profile"
         ></v-combobox>
         <v-text-field
@@ -57,17 +57,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, onMounted, computed } from 'vue';
 import { useUserStore } from '@/store/userStore';
+import { useProfileStore } from '@/store/profileStore';
+import { storeToRefs } from 'pinia';
 
 const username : Ref<string> = ref('');
 const email : Ref<string> = ref('');
 const password: Ref<string> = ref('');
-const profile: Ref<string> = ref('')
-const profileList = ['Parent', 'Psychologue' , 'Professeur'] 
+const profile : Ref<string> = ref('')
 const isRegisterButtonActive : Ref<boolean> = ref(true)
 
 const userStore = useUserStore();
+const profileStore = useProfileStore();
+
+const { profiles } = storeToRefs(profileStore)
+
+
+onMounted(async () => {
+  await profileStore.fetchProfiles()
+})
+
+const profileList = computed(() => {
+  return  profiles
+})
 
 
 const emit = defineEmits(['switchToLoginSection','registerValidated'])
@@ -81,7 +94,7 @@ async function registeraccount() {
     // on a besoin des deux variable car un bouton en loading
     // est toujours cliquable, hors on veux prevenir cette etat
     isRegisterButtonActive.value = false;
-    const response: any = await userStore.createAccount({ email : email.value, password :password.value, username : username.value, profile :profile.value })
+    const response = await userStore.createAccount({ email : email.value, password :password.value, username : username.value, profile :profile.value })
     isRegisterButtonActive.value = true;
     // ajoute un utilisateur dans la table Users
     // à ne pas confondre avec la creation d'account

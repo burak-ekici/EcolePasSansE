@@ -71,6 +71,14 @@ const routes = [
     beforeEnter: [preventFromNotConnectedUser],
   },
   {
+    path: "/edit_profile",
+    name: "editProfile",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/EditProfile.vue"),
+    beforeEnter: [preventFromNotConnectedUser],
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     meta: { layout: "DefaultLayout" },
@@ -91,29 +99,24 @@ router.afterEach((to) => {
 
 
 
-async function preventConnectedUserToGoOnLoginPage( to , from , next) {
+async function preventConnectedUserToGoOnLoginPage(to, from, next) {
+  // si je le sors , router va essay" de charger pinia avant même de charger le plugin et donc erreur
   const userStore = useUserStore();
-  const { connected } = storeToRefs(userStore);
-  if (connected.value) {
-    router.back()
-  } else {
+  const user = await userStore.seeCurrentUser();
+  if (user) {
     next()
+  } else {
+    router.push('/')
   }
 }
 
 async function preventFromNotConnectedUser(to, from, next) {
   const userStore = useUserStore();
-  const { connected, isConnectionChecked } = storeToRefs(userStore);
-  if (!isConnectionChecked.value) {
-    const currentUser = await userStore.seeCurrentUser();
-    if (currentUser && currentUser.session.user) {
-      userStore.switchStoreUserConnectedStateToTrue();
-    }
-  }
-  if (!connected.value) {
-    router.push('/login')
-  } else {
+  const user = await userStore.seeCurrentUser();
+  if (user) {
     next()
+  } else {
+    router.push('/login')
   }
 }
 
