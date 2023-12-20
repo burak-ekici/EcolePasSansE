@@ -74,10 +74,19 @@ const user = computed(() => {
   background-color: #176b87;
   color: white;
 }
+
+*{
+  -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Standard */
+}
+
 .profileImage {
   width: 200px;
   height: 00px;
   border-radius: 50%;
   margin: 0 auto;
+  pointer-events: none;
 }
 </style>

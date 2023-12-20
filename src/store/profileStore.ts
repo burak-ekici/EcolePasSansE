@@ -18,6 +18,7 @@ export const useProfileStore = defineStore("profileStore", {
       try {
         const { data , error } = await supabase.from("Profile").select("name")
         if (data && data.length > 0) {
+          this.profiles = []
           for (const el of data) {
             this.profiles.push(el.name)
           }

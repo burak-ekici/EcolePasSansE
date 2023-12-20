@@ -100,13 +100,13 @@ router.afterEach((to) => {
 
 
 async function preventConnectedUserToGoOnLoginPage(to, from, next) {
-  // si je le sors , router va essay" de charger pinia avant même de charger le plugin et donc erreur
+  // userStore doit être dans la fonction car probleme de chargement sinon
   const userStore = useUserStore();
   const user = await userStore.seeCurrentUser();
   if (user) {
-    next()
-  } else {
     router.push('/')
+  } else {
+    next()
   }
 }
 

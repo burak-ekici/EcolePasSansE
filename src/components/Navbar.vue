@@ -36,15 +36,12 @@
         @click="redirectToLoginPage()"
       ></v-list-item>
     
-    
-      
-  
 
     <v-divider></v-divider>
     <!-- Changer d'utilisateur -->
     <v-list density="compact" nav>
       <v-list-item
-        v-if="isUserConnected"
+        v-if="user"
         @click="navigateTo('/switchUser')"
         :active="isActive('/switchUser')"
         prepend-icon="mdi-swap-horizontal"
@@ -62,7 +59,7 @@
         title="Acceuil"
         value="acceuil"
       ></v-list-item>
-      <template v-if="isUserConnected">
+      <template v-if="user">
 
         <v-list-item
           @click="navigateTo('/messagerie')"
@@ -99,7 +96,7 @@
       </template>
     </v-list>
 
-    <template v-if="isUserConnected" v-slot:append>
+    <template v-if="user" v-slot:append>
       <v-list-item
         prepend-icon="mdi-logout"
         title="Deconnexion"
@@ -119,7 +116,7 @@ import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 
-const { isUserConnected, user } = storeToRefs(userStore)
+const { user } = storeToRefs(userStore)
 
 const drawer: Ref<boolean> = ref(true);
 const rail: Ref<boolean> = ref(true);
@@ -163,7 +160,6 @@ async function logout() {
   if (response === true) {
     console.log('deconnexion reussie')
   }
-  console.log(router)
 }
 </script>
 
@@ -182,5 +178,10 @@ async function logout() {
 
 .ButtonSeConnecter:hover{
   background:$secondary-color;
+}
+*{
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
 }
 </style>

@@ -12,13 +12,15 @@
         Vous avez dejà un compte ?
         <a @click="switchToLoginSection">Se connecter</a>
       </h4>
-      <v-form class="mt-8" @submit.prevent="registeraccount">
+      <v-form  ref="form" :disabled="!isRegisterButtonActive" fast-fail class="mt-8" @submit.prevent="registeraccount">
         <v-combobox
+          :rules="[rules.isValidProfile, rules.required]"
           label="Profile"
           :items="profileList.value"
           v-model="profile"
         ></v-combobox>
         <v-text-field
+          :rules="[rules.required, rules.minLength(3), rules.maxLength(25)]"
           class="mb-2"
           type="text"
           density="compact"
@@ -29,6 +31,7 @@
         >
         </v-text-field>
         <v-text-field
+          :rules="[rules.isValidEmail, rules.required]"
           class="mb-2"
           type="email"
           density="compact"
@@ -39,6 +42,7 @@
         >
         </v-text-field>
         <v-text-field
+          :rules="[rules.required, rules.minLength(8), rules.maxLength(25)]"
           class="mb-2"
           type="password"
           density="compact"
@@ -65,13 +69,30 @@ import { storeToRefs } from 'pinia';
 const username : Ref<string> = ref('');
 const email : Ref<string> = ref('');
 const password: Ref<string> = ref('');
-const profile : Ref<string> = ref('')
+const profile: Ref<string> = ref('')
+const form = ref(null)
 const isRegisterButtonActive : Ref<boolean> = ref(true)
-
 const userStore = useUserStore();
 const profileStore = useProfileStore();
-
 const { profiles } = storeToRefs(profileStore)
+const rules = {
+  isValidEmail: (value) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value) || 'Adresse email invalide';
+  },
+  required: (value) => {
+    return !!value || 'Veuillez entrer une valeur valide'
+  },
+  minLength: ( minLength) => {
+    return (value) => value.length < minLength ? 'Le mot de passe doit contenir au minimum ' + minLength + ' charactéres' : true
+  },
+  maxLength: (maxLength) => {
+    return (value) => value.length > maxLength ? `Le mot de passe doit contenir au maximum ${maxLength} charactéres` : true
+  },
+  isValidProfile: (value) => {
+    return profileList.value.value.includes(value) ? true : "le nom de profile n'existe pas, verifiez la syntaxe"
+  },
+}
 
 
 onMounted(async () => {
@@ -90,27 +111,33 @@ function switchToLoginSection() : void{
 }
 
 async function registeraccount() {
-  try {
-    // on a besoin des deux variable car un bouton en loading
-    // est toujours cliquable, hors on veux prevenir cette etat
-    isRegisterButtonActive.value = false;
-    const response = await userStore.createAccount({ email : email.value, password :password.value, username : username.value, profile :profile.value })
-    isRegisterButtonActive.value = true;
-    // ajoute un utilisateur dans la table Users
-    // à ne pas confondre avec la creation d'account
-    if (!response.user) {
-      const error = { from : 'fonction registeraccount' , message : 'Une erreur est subvenue lors de la creation du compte'}
-      throw error
-    } else {
-      emit('registerValidated')
+  const isFormValid = await form.value.validate()
+  if (isFormValid.valid) {
+    try {
+      isRegisterButtonActive.value = false;
+      const profile_id = await profileStore.fetchProfileIdByName(profile.value)
+      if (profile_id !== null) {
+        const response = await userStore.createAccount({ email: email.value, password: password.value, username: username.value, profile_id: profile_id })
+        isRegisterButtonActive.value = true;
+        // ajoute un utilisateur dans la table Users
+        // à ne pas confondre avec la creation d'account
+        if (response === null) {
+          const error = { from: 'fonction registeraccount', message: 'Une erreur est subvenue lors de la creation du compte' }
+          throw error
+        } else {
+          form.value.reset()
+          emit('registerValidated')
+        }
+      } else {
+        throw new Error('erreur lors de la recuperation du profile_id via la varibla peorile qui contient le nom du profile') 
+      }
+      
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
-    if (error.message) {
-      alert(error.message)
-    }
+  } else {
+    console.log('erreur dans le formulaire')
   }
-  // emit('registerValidated')
 }
 
 

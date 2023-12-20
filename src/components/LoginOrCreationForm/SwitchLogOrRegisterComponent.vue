@@ -10,7 +10,7 @@
     </transition>
 
     <transition name="validationTransition">
-      <registerValidation v-if="isRegistered" class="validationComponent" />
+      <registerValidation v-if="isRegistered" class="validationComponent" @validationAnimationFinishied="switchToLoginSection"/>
     </transition>
 
     <div class="imageSection" :class="{ isRegisterSection}">
@@ -34,7 +34,8 @@ function switchToRegisterSection() : void{
   isRegisterSection.value = true
 }
 
-function switchToLoginSection() :void{
+function switchToLoginSection(): void{
+  isRegistered.value = false
   isRegisterSection.value = false
 }
 

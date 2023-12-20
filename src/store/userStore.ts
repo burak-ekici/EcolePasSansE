@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import { supabase } from "../supabaseConfig/supabaseClient";
 import User from '@/interfaces/userInterface'
 import router from "@/router";
-// verifie si un utilisateur est connecté lors de l'initialisation de l'application
 
 
 export const useUserStore = defineStore("userStore", {
@@ -16,60 +15,32 @@ export const useUserStore = defineStore("userStore", {
   
   },
   actions: {
-    async createAccount({ email , password , profile , username }) {
+    async createAccount({ email , password , profile_id , username }) {
       try {
         const { data, error } = await supabase.auth.signUp({
           email: email,
           password: password,
+          options: {
+            data: {
+              username: username,
+              email: email,
+              profileid: profile_id
+            },
+          },
         });
-        if (error) throw error;
-        if (data.user) {
-          this.createUser({ profile , username , email, id : data.user.id });
-          this.switchStoreUserConnectedStateToTrue();
+        if (data) {
           return data;
         }
+        if (error) throw error;
         return null
       } catch (error) {
-        if (error instanceof Error) {
-          console.log(error)
-        }
-        return error;
+        console.log(error)
       }
-    },
-    async createUser({ profile, username, email , id }) {
-      const userProfile_id = await this.getUserProfile(profile);
-      if (userProfile_id) {
-        const { data, error } = await supabase.from("Users").insert([
-          {
-            id : id,
-            avatar: "",
-            username: username,
-            email: email,
-            firstname: "",
-            lastname: "",
-            registered_at: new Date(Date.now()),
-            modified_at: null,
-            city: "",
-            adress: "",
-            zip_code: 0,
-            profile_id: userProfile_id,
-          },
-        ]);
-        if (data) {
-          console.log(data);
-          console.log("creation d'utilisateur reussie");
-          return data;
-        }
-        if (error) {
-          console.error("Erreur lors de l'ajout de l'élément:", error);
-        }
-      }
-      return null
     },
     async updateUser({ id, username , firstname , lastname , email , avatar , adress , profile_id, zip_code ,city } : User) {
       try {
         const { data, error } = await supabase
-          .from("Users")
+          .from("users")
           .update({
             username,
             firstname,
@@ -93,16 +64,40 @@ export const useUserStore = defineStore("userStore", {
         console.log(e)
       }
     },
+    async forgottenPAssword(email) {
+      // Sends the user a log in link via email. Once logged in you should direct the user to a new password form. And use "Update User" below to save the new password.
+      try {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(
+          email
+        );
+        if (error) throw error;
+        if (data) {
+          return data;
+        }
+        return null;
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async uploadAvatarImage(file, userId) {
       if (file && userId) {
         const { data, error } = await supabase.storage
           .from("avatars")
-          .upload(`/${userId}/`, file);
+          .upload(
+            `/${userId}/`,
+            file,
+            { upsert: true }
+          );
         if (error) {
           console.error("Error uploading image:", error);
           return null;
         }
-        return data;
+        if (data) {
+          console.log(data)
+          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/avatars/${userId}?v=${Math.random()}`;
+          return url;
+        }
+        return null
       }
       return null
     },
@@ -115,7 +110,6 @@ export const useUserStore = defineStore("userStore", {
             password: password,
           });
           if (data.user) {
-            this.connected = true;
             this.user = await this.getUserInfo(data.user.id);
             return data
           }
@@ -128,7 +122,11 @@ export const useUserStore = defineStore("userStore", {
         }
         return null
       } catch (error) {
-        console.log(error);
+        if (error.message == "Email not confirmed") {
+          alert('Veuillez valider votre Email')
+        } else {
+          console.log(error);
+        }
         return null;
       }
     },
@@ -139,7 +137,6 @@ export const useUserStore = defineStore("userStore", {
         alert("Une Erreur est survenue lors de la tentative de deconnexion");
         return false;
       }
-      this.connected = false;
       this.user = null
       router.push('/')
       return true;
@@ -150,7 +147,6 @@ export const useUserStore = defineStore("userStore", {
         // la fonction envoie une session si un user est connecté ou null s'il y en à pas .
         const { data, error } = await supabase.auth.getSession();
         if (data.session) {
-          this.switchStoreUserConnectedStateToTrue();
           this.user = await this.getUserInfo(data.session.user.id)
           return data
         }
@@ -170,9 +166,9 @@ export const useUserStore = defineStore("userStore", {
     },
     async getUserInfo(id : any) {
       try {
-        const { data: Users, error } = await supabase.from("Users").select("*").eq('id', id).single();
-        if (Users) {
-          return Users
+        const { data: users, error } = await supabase.from("users").select("*").eq('id', id).single();
+        if (users) {
+          return users
         }
         if( error) throw error
         return null
@@ -197,11 +193,6 @@ export const useUserStore = defineStore("userStore", {
         console.log(e)
       }
       
-    },
-    switchStoreUserConnectedStateToTrue(){
-      if (this.connected) return;
-      this.isConnectionChecked = true;
-      this.connected = true;
-    },
+    }
   },
 });
