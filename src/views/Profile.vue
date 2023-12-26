@@ -44,7 +44,8 @@
             </p>
           </div>
         </v-card>
-        <v-btn :to="{path : '/edit_profile'}" class="mt-2 bg-teal-accent-4 text-center">editer</v-btn>
+        <v-btn :to="{path : '/user/edit_profile'}" block class="mt-4 bg-teal-accent-4 text-center">Editer</v-btn>
+        <v-btn :to="{path : '/user/edit_password'}" block class="mt-2 btn-delete bg-warning text-center">Modifier le mot de passe</v-btn>
       </section>
     </div>
   </div>
@@ -69,12 +70,11 @@ const user = computed(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .cardTitle {
   background-color: #176b87;
   color: white;
 }
-
 *{
   -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */

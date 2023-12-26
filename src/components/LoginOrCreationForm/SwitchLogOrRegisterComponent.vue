@@ -1,7 +1,7 @@
 <template>
   <div class="loginComponentContainer">
 
-    <loginComponent @loginValidated="isValidate = true" @switch-to-register-section="switchToRegisterSection" />
+    <loginComponent @is-logged="isValidate = true" @loginValidated="isValidate = true" @switch-to-register-section="switchToRegisterSection" />
 
     <registerComponent @registerValidated="isRegistered = true"  @switch-to-login-section="switchToLoginSection" />
 

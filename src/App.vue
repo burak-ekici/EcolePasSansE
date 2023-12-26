@@ -4,6 +4,7 @@
     <component :key="layout" :is="layout ||'div'"> 
         <router-view :key="`${$route.path}${JSON.stringify($route.query)}`" /> <!-- le router-view prendra la place du slot dans le layout -->
     </component>
+    <AppNotifications />
   </v-app>
 </template>
 
@@ -14,6 +15,7 @@ import layouts from "@/layouts/layouts";
 import { useGlobalStore } from '@/store/globalStore';
 import { usePostsStore } from '@/store/PostsStore';
 import { useUserStore } from '@/store/userStore';
+import AppNotifications from '@/components/Notifications.vue'
 
 const globalStore = useGlobalStore()
 const { layoutName } = storeToRefs(globalStore)

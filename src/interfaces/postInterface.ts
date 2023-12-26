@@ -3,8 +3,8 @@ export interface PostsInterface {
   title: string,
   short: string,
   description: string,
-  publish_date: string,
+  publish_date: Date,
   last_modified_date?: Date,
-  src: any,
+  src: string,
   alt: string
 }

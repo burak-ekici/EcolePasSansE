@@ -55,18 +55,11 @@
               <v-btn
                 :loading="isFormLoading"
                 color="success"
-                class="mt-4 scale-2 validateButton"
+                block
+                class="mt-4"
                 type="submit"
               >
                 Valider
-              </v-btn>
-
-              <v-btn
-                color="warning"
-                class="mt-6"
-                @click="reset"
-              >
-                Tout effacer
               </v-btn>
             </div>
 
@@ -183,12 +176,6 @@ onMounted(async () => {
 
 })
 
-function reset() {
-  if (form.value) {
-    form.value.reset()
-  }
-}
-
 async function handleAvatarUpload(e) {
   avatarLoading.value = true;
   avatarImg.value = e.target.files[0];
@@ -238,7 +225,7 @@ async function update() {
         city : formData.city
       })
       isFormLoading.value = false
-      router.push('/profile')
+      router.push('/user/profile')
     } else {
       console.log("erreur : pas de profile_id ou de url pour l'avatar")
     }
@@ -278,7 +265,7 @@ async function update() {
   overflow: hidden
 }
 .btnContainer{
-  width:30%;
+  width:100%;
   margin: 0 auto;
   margin-bottom: 50px;
   display: flex;

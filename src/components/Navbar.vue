@@ -148,7 +148,7 @@ function redirectToLoginPage() :void{
 }
 
 function redirectToProfilePage() {
-  router.push('/profile')
+  router.push('/user/profile')
 }
 
 function isActive(routePath: string): boolean {
@@ -157,6 +157,7 @@ function isActive(routePath: string): boolean {
 
 async function logout() {
   const response: boolean = await userStore.logout();
+  user.value = null;
   if (response === true) {
     console.log('deconnexion reussie')
   }

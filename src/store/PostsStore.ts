@@ -8,6 +8,14 @@ export const usePostsStore = defineStore("postsStore", {
       posts: [] as Array<PostsInterface>,
     };
   },
+  
+  getters: {
+    getPost : (state)=> {
+      return (id: number | string) => {
+        return state.posts.find((post: PostsInterface) => String(post.id) === String(id));
+      }
+    }
+  },
   actions: {
     async getPosts() {
       try {
@@ -27,12 +35,5 @@ export const usePostsStore = defineStore("postsStore", {
         console.log(e);
       }  
     },
-  },
-  getters: {
-    getPost : (state)=> {
-      return (id: number | string) => {
-        return state.posts.find((post: PostsInterface) => String(post.id) === String(id));
-      }
-    }
   }
 });

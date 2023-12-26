@@ -3,7 +3,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/store/globalStore';
 import { useUserStore } from '@/store/userStore';
-import { storeToRefs } from 'pinia';
+import useNotifications from "@/composables/useNotifications";
+
+const { addNotification } = useNotifications();
 
 
 const routes = [
@@ -52,7 +54,7 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/LoginPage.vue"),
-    beforeEnter: [preventConnectedUserToGoOnLoginPage],
+    beforeEnter: [preventFromConnectedUser],
   },
   {
     path: "/post/:id",
@@ -63,7 +65,7 @@ const routes = [
       import(/* webpackChunkName: "canlendar" */ "@/views/Post.vue"),
   },
   {
-    path: "/profile",
+    path: "/user/profile",
     name: "Profile",
     meta: { layout: "DefaultLayout" },
     component: () =>
@@ -71,12 +73,27 @@ const routes = [
     beforeEnter: [preventFromNotConnectedUser],
   },
   {
-    path: "/edit_profile",
+    path: "/user/edit_profile",
     name: "editProfile",
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/EditProfile.vue"),
     beforeEnter: [preventFromNotConnectedUser],
+  },
+  {
+    path: "/user/reset_password",
+    name: "resetPassword",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/ResetPassword.vue"),
+    beforeEnter: [preventFromConnectedUser],
+  },
+  {
+    path: "/user/edit_password",
+    name: "editPassword",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/EditPassword.vue")
   },
   {
     path: "/:pathMatch(.*)*",
@@ -99,11 +116,12 @@ router.afterEach((to) => {
 
 
 
-async function preventConnectedUserToGoOnLoginPage(to, from, next) {
+async function preventFromConnectedUser(to, from, next) {
   // userStore doit être dans la fonction car probleme de chargement sinon
   const userStore = useUserStore();
   const user = await userStore.seeCurrentUser();
   if (user) {
+    addNotification({message :'Vous ne pouvez pas acceder à cette page en étant connecté', timeout : 6000 , type : 'error'})
     router.push('/')
   } else {
     next()
@@ -116,9 +134,17 @@ async function preventFromNotConnectedUser(to, from, next) {
   if (user) {
     next()
   } else {
+    addNotification({ message: "Vous devez être connecté pour acceder à cette page", timeout: 6000, type: "error" });
     router.push('/login')
   }
 }
 
+async function isAdmin(to, from, next) {
+  const userStore = useUserStore();
+  const user = await userStore.seeCurrentUser();
+  if (user) {
+    const profile = await userStore.getUserProfile()
+  }
+}
 
 export default router

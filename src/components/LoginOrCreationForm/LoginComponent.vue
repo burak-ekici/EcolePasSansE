@@ -6,12 +6,13 @@
       <h1 class="font-weight-bold mt-n2 text-h4">Bienvenue</h1>
       <h4 class="text-body-2 text-medium-emphasis">Vous n'avez pas encore de compte ? <a @click="switchToRegisterSection" >Creer un compte</a></h4>
       <v-form class="pt-12" @submit.prevent="login">
-        <v-text-field v-model="email" density="comfortable" bg-color="#fcfcfc" class="mb-2" type="email"  base-color="#000" label="Email" append-inner-icon="mdi-email">
+        <v-text-field variant="outlined" v-model="email" density="comfortable" bg-color="#fcfcfc" class="mb-2" type="email"  base-color="#000" label="Email" append-inner-icon="mdi-email">
         </v-text-field>
-        <v-text-field v-model="password" density="comfortable" class="mb-2" type="password" bg-color="#fcfcfc" base-color="#000" label="Mot de passe" append-inner-icon="mdi-lock">
+        <v-text-field variant="outlined" v-model="password" density="comfortable" class="mb-2" type="password" bg-color="#fcfcfc" base-color="#000" label="Mot de passe" append-inner-icon="mdi-lock">
         </v-text-field>
         <v-btn color="#176B87" class="text-white py-6" block type="submit" >Se connecter</v-btn>
       </v-form>
+      <p @click="goToResetPasswordPage" class="mdpOublie mt-4 text-center">Mot de passe oublié ?</p>
     </div>
   </div>
 </template>
@@ -25,7 +26,7 @@ const userStore = useUserStore();
 const email : Ref<string> = ref('')
 const password : Ref<string> = ref('')
 
-const emit = defineEmits(['switchToRegisterSection', 'loginValidated'])
+const emit = defineEmits(['switchToRegisterSection','isLogged'])
 
 function switchToRegisterSection(): void{
   emit('switchToRegisterSection')
@@ -33,13 +34,13 @@ function switchToRegisterSection(): void{
 
 async function login() {
   const response = await userStore.login(email.value, password.value)
-  if (!response) {
-    console.log(response)
-    alert('une erreur est survenue lors de la connexion')
-  } else {
+  if (response) {
     console.log('connexion reussie')
-    router.push('/')
+    emit('isLogged')
   }
+}
+function goToResetPasswordPage(){
+  router.push('/user/reset_password')
 }
 
 </script>
@@ -55,6 +56,11 @@ a {
 
 .loginSection{
   width:45%;
+}
+
+.mdpOublie{
+  color: blue;
+  cursor:pointer;
 }
 
 </style>

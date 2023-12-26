@@ -18,6 +18,7 @@
           label="Profile"
           :items="profileList.value"
           v-model="profile"
+          variant="outlined"
         ></v-combobox>
         <v-text-field
           :rules="[rules.required, rules.minLength(3), rules.maxLength(25)]"
@@ -28,6 +29,7 @@
           label="Nom d'utilisateur"
           append-inner-icon="mdi-account"
           v-model="username"
+          variant="outlined"
         >
         </v-text-field>
         <v-text-field
@@ -39,6 +41,7 @@
           label="Email"
           append-inner-icon="mdi-email"
           v-model="email"
+          variant="outlined"
         >
         </v-text-field>
         <v-text-field
@@ -50,6 +53,7 @@
           label="Mot de passe"
           append-inner-icon="mdi-lock"
           v-model="password"
+          variant="outlined"
         >
         </v-text-field>
         <v-btn :active="isRegisterButtonActive" :loading="!isRegisterButtonActive" color="#176B87" class="text-white py-6" block type="submit"
