@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/store/globalStore';
 import { useUserStore } from '@/store/userStore';
 import useNotifications from "@/composables/useNotifications";
+import { supabase } from '@/supabaseConfig/supabaseClient';
 
 const { addNotification } = useNotifications();
 
@@ -96,6 +97,14 @@ const routes = [
       import(/* webpackChunkName: "canlendar" */ "@/views/EditPassword.vue")
   },
   {
+    path: "/admin/posts",
+    name: "postAdmin",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/postsAdmin.vue"),
+    beforeEnter: [preventFromNotConnectedUser,isAdmin]
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     meta: { layout: "DefaultLayout" },
@@ -143,7 +152,20 @@ async function isAdmin(to, from, next) {
   const userStore = useUserStore();
   const user = await userStore.seeCurrentUser();
   if (user) {
-    const profile = await userStore.getUserProfile()
+    const userInfo = await userStore.getUserInfo(user.session.user.id);
+    if (userInfo) {
+      const profile = await userStore.getUserProfileNameById(userInfo.profile_id);
+      if (profile && profile.name === "Admin") {
+        next()
+      } else {
+        addNotification({
+          message: "Vous n'avez pas accés à cette page",
+          timeout: 6000,
+          type: "error",
+        });
+      }
+    }
+    
   }
 }
 

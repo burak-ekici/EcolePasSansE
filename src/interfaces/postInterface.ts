@@ -5,6 +5,6 @@ export interface PostsInterface {
   description: string,
   publish_date: Date,
   last_modified_date?: Date,
-  src: string,
-  alt: string
+  image_src: string,
+  image_alt: string
 }

@@ -218,7 +218,6 @@ export const useUserStore = defineStore("userStore", {
       router.push("/");
       return true;
     },
-    async editAccount() {},
     async seeCurrentUser() {
       try {
         // la fonction envoie une session si un user est connecté ou null s'il y en à pas .

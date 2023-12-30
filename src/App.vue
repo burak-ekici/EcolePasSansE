@@ -37,7 +37,7 @@ watch(layoutName, () => {
 });
 
 // creer les posts dans le state
-const postsStore = usePostsStore()
-postsStore.getPosts()
+// const postsStore = usePostsStore()
+// postsStore.getPosts()
 
 </script>
