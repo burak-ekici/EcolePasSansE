@@ -2,7 +2,7 @@
   <!-- Les posts sont accessible sur la HomePage -->
   <v-container>
     <h2 class="text-center mt-4 mb-16 text-uppercase">{{ getPost(postId)?.title }}</h2>
-    <img v-if="getPost(postId)?.src" class="mainImg rounded" :src="getPost(postId)?.src" :alt="getPost(postId)?.alt">
+    <img v-if="getPost(postId)?.image_src" class="mainImg rounded" :src="getPost(postId)?.image_src" :alt="getPost(postId)?.image_alt">
     <p>{{ getPost(postId)?.description }}</p> 
   </v-container>
 </template>

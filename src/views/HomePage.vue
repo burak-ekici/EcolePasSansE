@@ -1,17 +1,17 @@
 <template>
-  <div v-if="posts.length" class="newsPageContainer pa-10">
+  <div v-if="getPosts" class="newsPageContainer pa-10">
     <div class="subContainer">
       <h2 class="text-center mb-8 block">News</h2>
-      <Caroussel :posts="posts" />
-      <section v-if="posts.length" class="posts">
+      <Caroussel :posts="getPosts" />
+      <section v-if="getPosts.length" class="posts">
         <v-card class="mt-6 pb-6" style="position:relative"  v-for="(post, index) in postsToShow" :key="post.title">
           <v-toolbar color="#176B87" border class="text-white pr-3">
             <v-toolbar-title >{{ post.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <p>publié le {{ getformatedDate(post.publish_date) + ' à ' +  getHourFromDate(post.publish_date)}}</p>
+            <p>publié le {{ getformatedDate(post.published_at) + ' à ' +  getHourFromDate(post.published_at)}}</p>
           </v-toolbar>
           <div class="pa-6">
-            <img :class="{'float-right' : index % 2 , 'float-left' : !(index % 2) }" :src="post.src" alt="">
+            <img :class="{'float-right' : index % 2 , 'float-left' : !(index % 2) }" :src="post.image_src" :alt="post.image_alt">
             <p>{{ raccourcirLeText(post.description,50) }} ...</p>
           </div>
           <div class="btnDiv pr-6 pt-4">
@@ -32,15 +32,16 @@ import { ref } from 'vue';
 
 const postsStore = usePostsStore()
 // recupere les posts via le store
-const { posts } = storeToRefs(postsStore)
-
-const postsToShow = ref(posts.value.slice(0,5))
+const { getPosts } = storeToRefs(postsStore)
+await postsStore.fetchPosts()
+const postsToShow = ref(getPosts.value?.slice(0, 5) || undefined)
 
 function loadMorePosts() {
-  const startIndex = postsToShow.value.length
-  const arrayToPush = posts.value.slice(startIndex, startIndex +5)
-  arrayToPush.forEach(el => {
-    postsToShow.value.push(el)
+  // ajoute 5 element au tableau qui affiche les news ( postsToShow )
+  const startIndex = postsToShow.value?.length || 0
+  const arrayToPush = getPosts.value?.slice(startIndex, startIndex +5)
+  arrayToPush?.forEach(el => {
+    postsToShow.value?.push(el)
   })
 }
 
@@ -48,13 +49,13 @@ function raccourcirLeText(text: string, longueurMax: number) :string {
   return text.split(' ').slice(0,longueurMax).join(' ')
 }
 
-function getformatedDate(dateToModify: string) : string {
-  const date = dateToModify.split(' ')[0]
+function getformatedDate(dateToModify: string): string {
+  const date = dateToModify.split('T')[0]
   return date.split('-').join('/')
 }
 
-function getHourFromDate(dateToModify : string) : string {
-  return dateToModify.split(' ')[1].slice(0,5)
+function getHourFromDate(dateToModify: string): string {
+  return dateToModify.split('T')[1].slice(0,5)
 }
 
 </script>

@@ -5,32 +5,35 @@ import { supabase } from "@/supabaseConfig/supabaseClient";
 export const usePostsStore = defineStore("postsStore", {
   state: () => {
     return {
-      posts: [] as Array<PostsInterface>,
+      posts: null as PostsInterface[] | null,
     };
   },
   getters: {
-    getPost : (state)=> {
-      return (id: number | string) => {
-        return state.posts.find((post: PostsInterface) => String(post.id) === String(id));
-      }
+    getPost: (state) => {
+      return (id: number | string): PostsInterface | null => {
+        return state.posts?.find(
+          (post: PostsInterface) => String(post.id) === String(id)
+        ) || null;
+      };
     },
-    getPosts: (state) => {
+    getPosts: (state): PostsInterface[] | null => {
       return state.posts;
-    }
+    },
   },
   actions: {
-    async fetchPosts() {
+    async fetchPosts(): Promise<PostsInterface[] | null> {
       try {
         const { data, error } = await supabase.from("posts").select("*");
         if (data && data.length > 0) {
           this.posts = data;
-          return data
+          return data;
         }
         if (error) throw error;
         return null;
       } catch (e) {
         console.log(e);
-      }  
+        return null;
+      }
     },
     async fetchPostById(id: number | string) {
       try {
@@ -47,8 +50,8 @@ export const usePostsStore = defineStore("postsStore", {
       } catch (e) {
         console.log(e);
       }
-    }, 
-    async createPost(post: PostsInterface) {  
+    },
+    async createPost(post: PostsInterface): Promise<PostsInterface[] | null> {
       try {
         const { data, error } = await supabase.from("posts").insert(post);
         if (error) throw error;
@@ -58,6 +61,7 @@ export const usePostsStore = defineStore("postsStore", {
         return null;
       } catch (e) {
         console.log(e);
+        return null;
       }
     },
     async updatePost(post: PostsInterface) {
@@ -89,6 +93,6 @@ export const usePostsStore = defineStore("postsStore", {
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 });

@@ -1,9 +1,11 @@
 <template>
   <v-app>
     <!-- ce component charge le layout ( default ou kids) qui contient la navbar et un slot default -->
-    <component :key="layout" :is="layout ||'div'"> 
-        <router-view :key="`${$route.path}${JSON.stringify($route.query)}`" /> <!-- le router-view prendra la place du slot dans le layout -->
-    </component>
+    <Suspense>
+      <component :key="layout" :is="layout ||'div'"> 
+          <router-view :key="`${$route.path}${JSON.stringify($route.query)}`" /> <!-- le router-view prendra la place du slot dans le layout -->
+      </component>
+    </Suspense>
     <AppNotifications />
   </v-app>
 </template>
@@ -13,7 +15,6 @@ import { watch, shallowRef, ShallowRef, onMounted } from 'vue';
 import { storeToRefs } from 'pinia'
 import layouts from "@/layouts/layouts";
 import { useGlobalStore } from '@/store/globalStore';
-import { usePostsStore } from '@/store/PostsStore';
 import { useUserStore } from '@/store/userStore';
 import AppNotifications from '@/components/Notifications.vue'
 

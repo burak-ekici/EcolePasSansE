@@ -9,9 +9,9 @@
     <v-carousel-item
       v-for="post in carouselItems"
       :key="post.title"
-      :alt="post.alt"
+      :alt="post.image_alt"
       cover
-      :src="post.src"
+      :src="post.image_src"
 
     >
     <v-toolbar color="#001C30">
