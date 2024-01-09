@@ -10,7 +10,7 @@
         </v-text-field>
         <v-text-field variant="outlined" v-model="password" density="comfortable" class="mb-2" type="password" bg-color="#fcfcfc" base-color="#000" label="Mot de passe" append-inner-icon="mdi-lock">
         </v-text-field>
-        <v-btn color="#176B87" class="text-white py-6" block type="submit" >Se connecter</v-btn>
+        <v-btn color="#176B87" :disabled="isLogging" :loading="isLogging" class="text-white py-6" block type="submit" >Se connecter</v-btn>
       </v-form>
       <p @click="goToResetPasswordPage" class="mdpOublie mt-4 text-center">Mot de passe oublié ?</p>
     </div>
@@ -24,7 +24,8 @@ import { ref, Ref } from 'vue';
 
 const userStore = useUserStore();
 const email : Ref<string> = ref('')
-const password : Ref<string> = ref('')
+const password: Ref<string> = ref('')
+const isLogging : Ref<boolean> = ref(false)
 
 const emit = defineEmits(['switchToRegisterSection','isLogged'])
 
@@ -33,11 +34,13 @@ function switchToRegisterSection(): void{
 }
 
 async function login() {
+  isLogging.value = true
   const response = await userStore.login(email.value, password.value)
   if (response) {
     console.log('connexion reussie')
     emit('isLogged')
   }
+  isLogging.value = false
 }
 function goToResetPasswordPage(){
   router.push('/user/reset_password')
