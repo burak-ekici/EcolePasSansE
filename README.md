@@ -1,57 +1,25 @@
-# essentials
+ECOLEPSE est une école alternative qui permet un meilleur suivi des enfants ayant des difficultés
 
-## Project setup
+avec l'école publique.
 
-```
-# yarn
-yarn
+Par exemple, les enfants autistes ne sont pas toujours bien accompagnés.
 
-# npm
-npm install
+Ecolepse permetra de metre en relation différents corps de métier tel psychologue, infirmier(e), psychomotricien(ne).
 
-# pnpm
-pnpm install
-```
+De faire une fiche de suivi par étudiant qui sera rempli par les différents intervenants et intervenantes.
 
-### Compiles and hot-reloads for development
 
-```
-# yarn
-yarn dev
 
-# npm
-npm run dev
+Fonctionnalité de l'application :
 
-# pnpm
-pnpm dev
-```
 
-### Compiles and minifies for production
 
-```
-# yarn
-yarn build
+- Gestion des utilisateurs
 
-# npm
-npm run build
+- Messageries ( visio ou message)
 
-# pnpm
-pnpm build
-```
+- Gestion de fichiers
 
-### Lints and fixes files
+- Activités pour les enfants (des exercices sous forme de jeux et autres)
 
-```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
+- Agenda ( emploi du temp, rendez-vous, etc.)
