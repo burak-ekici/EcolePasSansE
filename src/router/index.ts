@@ -105,6 +105,14 @@ const routes = [
     beforeEnter: [preventFromNotConnectedUser,isAdmin]
   },
   {
+    path: "/admin/new_post",
+    name: "newPost",
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/addPost.vue"),
+    beforeEnter: [preventFromNotConnectedUser,isAdmin]
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     meta: { layout: "DefaultLayout" },

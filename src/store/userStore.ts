@@ -156,7 +156,9 @@ export const useUserStore = defineStore("userStore", {
             timeout: 5000,
             type: "success",
           });
-          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/avatars/${userId}?v=${Math.random()}`;
+          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/avatars/${
+            userId + "?v=" + Math.random()
+            }`;
           return url;
         }
         return null;

@@ -3,7 +3,7 @@
     <section class="titleAndAddBtn d-flex pr-16">
       <h1 class="mb-8">Liste des News</h1>
       <v-spacer></v-spacer>
-      <v-btn rounded color="success" icon="mdi-plus" density="comfortable"></v-btn>
+      <v-btn @click="navigateToAddPost" rounded color="success" icon="mdi-plus" density="comfortable"></v-btn>
     </section>
     <v-row>
       <v-col v-for="post in getPosts" :key="post.id" cols="12" sm="6" xl="3">
@@ -42,14 +42,16 @@
 <script lang="ts" setup>
 import { usePostsStore } from "@/store/PostsStore";
 import { storeToRefs } from "pinia";
-import { ref, Ref } from "vue";
+import router from "@/router";
 
 const postsStore = usePostsStore();
 const { getPosts } = storeToRefs(postsStore);
 
 await postsStore.fetchPosts();
 
-
+function navigateToAddPost() {
+  router.push({ name: "newPost" });
+}
 
 </script>
 

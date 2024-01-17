@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import { PostsInterface } from "@/interfaces/postInterface";
 import { supabase } from "@/supabaseConfig/supabaseClient";
+import useNotifications from "@/composables/useNotifications";
+
+const { addNotification } = useNotifications();
 
 export const usePostsStore = defineStore("postsStore", {
   state: () => {
@@ -51,17 +54,23 @@ export const usePostsStore = defineStore("postsStore", {
         console.log(e);
       }
     },
-    async createPost(post: PostsInterface): Promise<PostsInterface[] | null> {
+    async createPost(post: PostsInterface) {
+      // la fonction renvoie null lors de son fonctionnement normal
       try {
         const { data, error } = await supabase.from("posts").insert(post);
         if (error) throw error;
-        if (data) {
-          return data;
-        }
-        return null;
+        addNotification({
+          message: "le posts à bien été creer",
+          timeout: 5000,
+          type: "success",
+        });
+        return true;
       } catch (e) {
         console.log(e);
-        return null;
+        addNotification({
+          message: "Erreur lors de la creation du posts",
+          type: "error",
+        });
       }
     },
     async updatePost(post: PostsInterface) {
@@ -94,5 +103,29 @@ export const usePostsStore = defineStore("postsStore", {
         console.log(e);
       }
     },
+    async storePostImage(file: File, post_title: number | string) {
+      try {
+        const { data, error } = await supabase.storage
+          .from("posts_image")
+          .upload(`post-name:${post_title}`, file, { upsert: true });
+        if (error) throw error;
+        if (data) {
+          addNotification({
+            message: "l'image à bien été uploadé",
+            timeout: 5000,
+            type: "success",
+          });
+          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/posts_image/${post_title}`;
+          return url;
+        }
+        return null;
+      } catch (e) {
+        addNotification({
+          message: "Erreur lors de l'uploading de l'image",
+          type: "error",
+        });
+        return null;
+      }
+    }
   },
 });
