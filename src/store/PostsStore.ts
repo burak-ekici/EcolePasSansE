@@ -115,7 +115,7 @@ export const usePostsStore = defineStore("postsStore", {
             timeout: 5000,
             type: "success",
           });
-          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/posts_image/${post_title}`;
+          const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/posts_image/post-name:${post_title}`;
           return url;
         }
         return null;

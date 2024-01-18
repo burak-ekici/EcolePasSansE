@@ -1,45 +1,55 @@
 <template>
   <div class="container">
     <div class="subContainer">
-      <h1 class="text-center">Ajouter un post</h1>
+      <h1 class="text-center mb-16">Ajouter un post</h1>
       <v-form>
         <v-text-field
+          class="mb-4"
           v-model="title"
           label="Titre"
           required
+          variant="outlined"
         ></v-text-field>
         <v-text-field
+        class="mb-4"
           v-model="short"
           label="short"
           required
+          variant="outlined"
         ></v-text-field>
         <v-textarea
+        class="mb-4"
           v-model="description"
-          label="Description"
+          label="Contenu"
           required
+          variant="outlined"
         ></v-textarea>
         <v-file-input
-          label="Image"
+        class="mb-4"
+          label="Selectionner une image"
           accept="image/*"
           prepend-icon="mdi-camera"
           placeholder="Choisissez une image"
-          outlined
+          variant="outlined"
           @change="handleImage"
           required
         ></v-file-input>
         <v-text-field
+          class="mb-4"
           v-model="image_alt"
-          label="Image description"
+          label="Description de l'image"
           placeholder="Choisissez une image"
           outlined
           required
+          variant="outlined"
         ></v-text-field>
         <v-btn
-          :active="true"
-          :loading="false"
+          :active="!isloading"
+          :loading="isloading"
           color="success"
           class="text-white"
           @click="addPost"
+          block
         >Ajouter</v-btn>
       </v-form>
     </div>
@@ -49,23 +59,25 @@
 <script lang="ts" setup>
 
 import { usePostsStore } from "@/store/PostsStore";
-import { ref } from "vue";
+import { ref , Ref } from "vue";
 import router from "@/router";
 import { PostsInterface } from "@/interfaces/postInterface";
 
 const postsStore = usePostsStore();
 
-const title = ref("");
-const short = ref("");
-const description = ref("");
-const image_file = ref(null);
-const image_alt = ref("");
+const isloading : Ref<boolean> = ref(false);
+const title : Ref<string> = ref("");
+const short : Ref<string> = ref("");
+const description : Ref<string> = ref("");
+const image_file : Ref<File | null> = ref(null);
+const image_alt : Ref<string> = ref("");
 
 function handleImage(e: any) {
   image_file.value = e.target.files[0];
 }
 
 async function addPost() {
+  isloading.value = true;
   if (image_file.value === null) {
     return;
   }
@@ -78,7 +90,8 @@ async function addPost() {
     image_src: url,
     image_alt: image_alt.value,
   } as PostsInterface);
-  console.log(response)
+
+  isloading.value = false;
   if (response) {
     console.log('Redirection vers /admin/posts');
     router.push('/admin/posts');
@@ -90,5 +103,7 @@ async function addPost() {
 <style lang="scss" scoped>
 .container{
   padding:3rem 6rem;
+  min-height: 100vh;
+  overflow: hidden;
 }
 </style>

@@ -55,7 +55,12 @@ function getformatedDate(dateToModify: string): string {
 }
 
 function getHourFromDate(dateToModify: string): string {
-  return dateToModify.split('T')[1].slice(0,5)
+  const hourGMT0 = dateToModify.split('T')[1].slice(0, 5)
+  const hourGMT1 = hourGMT0[0] + (+hourGMT0[1] + 1) + hourGMT0.slice(2)
+  if (+hourGMT1.slice(0, 2) > 23) {
+    return ((24 - +hourGMT1.slice(0, 2)) === 0 ? '00' : 24 - +hourGMT1.slice(0, 2)) + hourGMT1.slice(2)
+  }
+  return hourGMT1
 }
 
 </script>

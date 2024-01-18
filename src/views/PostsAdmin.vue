@@ -7,7 +7,7 @@
     </section>
     <v-row>
       <v-col v-for="post in getPosts" :key="post.id" cols="12" sm="6" xl="3">
-        <v-sheet border>
+        <v-sheet border @click="goToPostPage(post.id)" style="cursor: pointer">
           <v-img
             :src="post.image_src"
             cover
@@ -52,7 +52,9 @@ await postsStore.fetchPosts();
 function navigateToAddPost() {
   router.push({ name: "newPost" });
 }
-
+function goToPostPage(id: number) {
+  router.push(`/post/${id}`);
+}
 </script>
 
 <style lang="scss" scoped>
