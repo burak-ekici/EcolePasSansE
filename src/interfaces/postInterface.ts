@@ -4,7 +4,8 @@ export interface PostsInterface {
   short: string;
   description: string;
   published_at: Date;
-  last_modified_date?: Date;
+  modified_at?: Date;
   image_src: string;
   image_alt: string;
+  author: string;
 }

@@ -62,6 +62,10 @@ import { usePostsStore } from "@/store/PostsStore";
 import { ref , Ref } from "vue";
 import router from "@/router";
 import { PostsInterface } from "@/interfaces/postInterface";
+import { useUserStore } from "@/store/userStore";
+import { storeToRefs } from "pinia";
+
+const { user } = storeToRefs(useUserStore());
 
 const postsStore = usePostsStore();
 
@@ -84,6 +88,7 @@ async function addPost() {
   const url: string = await postsStore.storePostImage(image_file.value, title.value) || "";
 
   const response = await postsStore.createPost({
+    author: String(user.value?.id),
     title: title.value,
     short: short.value,
     description: description.value,

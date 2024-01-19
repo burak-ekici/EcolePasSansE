@@ -4,7 +4,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/store/globalStore';
 import { useUserStore } from '@/store/userStore';
 import useNotifications from "@/composables/useNotifications";
-import { supabase } from '@/supabaseConfig/supabaseClient';
 
 const { addNotification } = useNotifications();
 
@@ -110,6 +109,15 @@ const routes = [
     meta: { layout: "DefaultLayout" },
     component: () =>
       import(/* webpackChunkName: "canlendar" */ "@/views/addPost.vue"),
+    beforeEnter: [preventFromNotConnectedUser,isAdmin]
+  },
+  {
+    path: "/admin/edit_post/:id",
+    name: "editPost",
+    props: true,
+    meta: { layout: "DefaultLayout" },
+    component: () =>
+      import(/* webpackChunkName: "canlendar" */ "@/views/EditPost.vue"),
     beforeEnter: [preventFromNotConnectedUser,isAdmin]
   },
   {

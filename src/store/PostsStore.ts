@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { PostsInterface } from "@/interfaces/postInterface";
 import { supabase } from "@/supabaseConfig/supabaseClient";
 import useNotifications from "@/composables/useNotifications";
+import { PostsInterface } from './../interfaces/postInterface';
 
 const { addNotification } = useNotifications();
 
@@ -68,7 +69,7 @@ export const usePostsStore = defineStore("postsStore", {
       } catch (e) {
         console.log(e);
         addNotification({
-          message: "Erreur lors de la creation du posts",
+          message: "Erreur lors de la creation du post",
           type: "error",
         });
       }
@@ -80,12 +81,18 @@ export const usePostsStore = defineStore("postsStore", {
           .update(post)
           .eq("id", post.id);
         if (error) throw error;
-        if (data) {
-          return data;
-        }
-        return null;
+        addNotification({
+          message: "le posts à bien été modifier",
+          timeout: 5000,
+          type: "success",
+        });
+        return true;
       } catch (e) {
         console.log(e);
+        addNotification({
+          message: "Erreur lors de la modification du post",
+          type: "error",
+        });
       }
     },
     async deletePost(id: number | string) {
@@ -95,10 +102,17 @@ export const usePostsStore = defineStore("postsStore", {
           .delete()
           .eq("id", id);
         if (error) throw error;
-        if (data) {
-          return data;
+        if (this.posts) {
+          this.posts = this.posts.filter(
+            (post: PostsInterface) => post.id !== id
+          );
         }
-        return null;
+        addNotification({
+          message: "le posts à bien été supprimer",
+          timeout: 5000,
+          type: "success",
+        });
+        return true;
       } catch (e) {
         console.log(e);
       }

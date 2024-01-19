@@ -7,8 +7,10 @@
     </section>
     <v-row>
       <v-col v-for="post in getPosts" :key="post.id" cols="12" sm="6" xl="3">
-        <v-sheet border @click="goToPostPage(post.id)" style="cursor: pointer">
+        <v-sheet border >
           <v-img
+            style="cursor: pointer"
+            @click="goToPostPage(post.id)"
             :src="post.image_src"
             cover
             height="250"
@@ -28,7 +30,7 @@
             <v-divider class="my-2"></v-divider>
 
             <section class="btnSection d-flex">
-              <v-btn :active="true" :loading="false" color="success" class="text-white">Modifier</v-btn>
+              <v-btn @click="navigateToEditPost(post.id)" :active="true" :loading="false" color="success" class="text-white">Modifier</v-btn>
               <v-spacer></v-spacer>
               <v-btn :active="true" :loading="false" color="red-darken-1" class="text-white">Supprimer</v-btn>
             </section>
@@ -54,6 +56,9 @@ function navigateToAddPost() {
 }
 function goToPostPage(id: number) {
   router.push(`/post/${id}`);
+}
+function navigateToEditPost(id: number) {
+  router.push({ name: "editPost", params: { id } });
 }
 </script>
 
