@@ -115,6 +115,10 @@ export const usePostsStore = defineStore("postsStore", {
         return true;
       } catch (e) {
         console.log(e);
+        addNotification({
+          message: "Erreur lors de la suppression du post",
+          type: "error",
+        });
       }
     },
     async storePostImage(file: File, post_title: number | string) {
