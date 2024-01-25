@@ -20,17 +20,22 @@
 
 <script lang="ts" setup>
 import Tchat from '@/components/Tchat.vue';
-import messages from '../../MessageData.json';
-import { Ref, computed, ref } from 'vue';
+import { ref, Ref } from 'vue';
+import { useMessageStore } from '@/store/messageStore';
+import { useUserStore } from '@/store/userStore';
+import { storeToRefs } from 'pinia';
 
-const selectedUser :Ref<number | null> = ref(null)
-const filteredMessages = messages.filter(el => el.to_user_id !== el.from_user_id);
-function selectUser(id: number): void {
-  selectedUser.value = id
+const userStore = useUserStore();
+const messageStore = useMessageStore();
+
+const { user } = storeToRefs(userStore);
+
+if(user.value?.id){
+  messageStore.fetchSalon(user.value.id)
 }
-const messagesToProps = computed(() => {
-  return filteredMessages.filter(message => message.to_user_id === selectedUser.value && message.from_user_id === 4)
-})
+
+
+
 
 </script>
 

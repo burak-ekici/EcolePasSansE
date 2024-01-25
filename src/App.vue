@@ -22,7 +22,6 @@ const globalStore = useGlobalStore()
 const { layoutName } = storeToRefs(globalStore)
 const userStore = useUserStore()
 
-
 onMounted(async () => {
   await userStore.seeCurrentUser()
 })
