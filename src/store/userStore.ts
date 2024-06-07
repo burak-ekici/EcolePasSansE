@@ -32,6 +32,7 @@ export const useUserStore = defineStore("userStore", {
           addNotification({
             message: "Votre compte à bien été creer, veuillez activer votre compte via votre boîte mail",
             type: "success",
+            timeout : 3000
           });
           return data;
         }
@@ -74,7 +75,7 @@ export const useUserStore = defineStore("userStore", {
         if (data) {
           addNotification({
             message: "Votre profile à bien été mis à jour",
-            timeout: 5000,
+            timeout: 3000,
             type: "success",
           });
           return data;
@@ -153,7 +154,7 @@ export const useUserStore = defineStore("userStore", {
         if (data) {
           addNotification({
             message: "l'image à bien été uploadé",
-            timeout: 5000,
+            timeout: 3000,
             type: "success",
           });
           const url = `https://kqxafknfgpkptwuvppjv.supabase.co/storage/v1/object/public/avatars/${
@@ -174,11 +175,6 @@ export const useUserStore = defineStore("userStore", {
             password: password,
           });
           if (data.user) {
-            addNotification({
-              message: "Connexion réussie",
-              timeout : 5000,
-              type: "success",
-            });
             this.user = await this.getUserInfo(data.user.id);
             return data;
           }
@@ -274,9 +270,10 @@ export const useUserStore = defineStore("userStore", {
         return null;
       } catch (e) {
         console.log(e);
+        return null;
       }
     },
-    async getUserProfileNameById(id) {
+    async getUserProfileNameById( id : string) : Promise<any> {
       try {
         const { data, error } = await supabase.from("Profile").select('name').eq("id", id).single()
         if (error) throw error
@@ -291,6 +288,27 @@ export const useUserStore = defineStore("userStore", {
           type: "error",
         });
         console.log(e)
+        return null;
+      }
+    },
+    async getContributorUsers() { // fetch les intervenants ( ex : le dropdown de creation de salon)
+      try {
+        const parentProfileId = await this.getUserProfileIdByName('Parent')
+        const { data, error } = await supabase.from('users')
+          .select('username,firstname, lastname, id, email , profile_id, avatar ')
+          .neq('profile_id', parentProfileId)
+        if (data && data.length > 0) {
+          for (let i = 0; i < data.length; i++){
+            const profile = await this.getUserProfileNameById(data[i].profile_id)
+            data[i].profile_id = profile.name
+          }
+          return data
+        } else {
+          throw Error
+        }
+      } catch (e) {
+        console.log(e)
+        alert("Une erreur est survenue lors de la récuperation des profiles intervenant dans l'école");
       }
     }
   },

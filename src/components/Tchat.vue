@@ -40,39 +40,9 @@
 
       <!-------------------------------------- Message input area  -->
       <div class="inputDiv">
-        <v-text-field
-          placeholder="message"
-          type="text"
-          no-details
-          outlined
-          bg-color="#fff"
-          hide-details
-        >
-          <template v-slot:append-inner>
-            <div>
-              <v-icon class="sendIcon" icon="mdi-send"></v-icon>
-            </div>
-          </template>
-
-          <template v-slot:prepend>
-            <div>
-              <v-tooltip activator="parent" location="top"
-                >Lancer l'enregistrement video</v-tooltip
-              >
-              <v-icon size="large" class="iconVideo" icon="mdi-video"></v-icon>
-            </div>
-            <div class="ml-2" style="transform: rotate(45deg)">
-              <v-tooltip activator="parent" location="top"
-                >Joindre un fichier</v-tooltip
-              >
-              <v-icon
-                size="large"
-                class="iconPaperclip"
-                icon="mdi-paperclip"
-              ></v-icon>
-            </div>
-          </template>
-        </v-text-field>
+        <div class="textAreaContainer">
+          <textarea class="textarea"></textarea>
+        </div>
       </div>
     </div>
   </v-container>
@@ -94,7 +64,7 @@
   flex-direction: column;
 
   .messagesListDiv {
-    height: 90%;
+    height: 80%;
     display: flex;
     flex-direction: column-reverse;
     padding-bottom: 20px;
@@ -122,5 +92,21 @@
 .iconPaperclip:hover,
 .iconVideo:hover {
   color: rgb(83, 83, 83);
+}
+
+textarea {
+  width:100%;
+  height : 150px;
+  resize: none;
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  border : none;
+  background-color: white;
+  font-size: 20px;
+}
+
+textarea:focus {
+  outline: none; /* Assurez-vous que l'outline est supprimé */
 }
 </style>

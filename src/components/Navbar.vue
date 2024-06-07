@@ -38,17 +38,7 @@
     
 
     <v-divider></v-divider>
-    <!-- Changer d'utilisateur -->
-    <v-list density="compact" nav>
-      <v-list-item
-        v-if="user"
-        @click="navigateTo('/switchUser')"
-        :active="isActive('/switchUser')"
-        prepend-icon="mdi-swap-horizontal"
-        title="Changer d'utilisateur"
-        value="switchUser"
-      ></v-list-item>
-    </v-list>
+
 
     <!-- Menu navbar -->
     <v-list density="compact" style="top: 42%; transform: translateY(-50%)" nav>
@@ -73,16 +63,8 @@
           @click="navigateTo('/files')"
           :active="isActive('/files')"
           prepend-icon="mdi-file"
-          title="File"
+          title="Fichier"
           value="file"
-        ></v-list-item>
-
-        <v-list-item
-          @click="navigateTo('/activites')"
-          :active="isActive('/activites')"
-          prepend-icon="mdi-ticket"
-          title="Activités"
-          value="activités"
         ></v-list-item>
 
         <v-list-item

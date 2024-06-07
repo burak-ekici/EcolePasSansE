@@ -33,14 +33,6 @@ const routes = [
     beforeEnter: [preventFromNotConnectedUser],
   },
   {
-    path: "/activites",
-    name: "Activites",
-    meta: { layout: "DefaultLayout" },
-    component: () =>
-      import(/* webpackChunkName: "canlendar" */ "@/views/ActivityPage.vue"),
-    beforeEnter: [preventFromNotConnectedUser],
-  },
-  {
     path: "/calendar",
     name: "CalendarPage",
     meta: { layout: "DefaultLayout" },

@@ -20,7 +20,7 @@ import gsap from "gsap";
 
 onMounted(() => {
   setTimeout(() => {
-    router.push({path:'/'});
+    router.push({name : 'HomePage'});
   }, 2000);
   const tl = gsap.timeline();
 
